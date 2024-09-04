@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="Assets\Images\favicon.png" type="image/png">
     <meta name="Author" content="Jesús Parra, Elkin Morillo, Anderson Vinasco, Paulo Chamorro, Alejandro Cárdenas">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.js"></script>
 </head>
 <body>
     <header class="header">
@@ -25,30 +26,60 @@
                 <legend>Datos de la simulación</legend>
                 <form action="" class="form__form">
                     <div class="form__input-container">
-                        <label for="">Dato 1
+                        <label>Masa de la barra (kg)
                             <div class="input-container__data-container">
-                                <input type="range" name="" id="slider_data_1">
-                                <div class="input-container__value" id="text_data_1">100</div>
+                                <input type="range" name="" id="mass_range_value">
+                                <div class="input-container__value" id="mass_range_text">100</div>
                             </div>
                         </label>
                     </div>
                     <div class="form__input-container">
-                        <label for="">Dato 2
+                        <label>Longitud de la barra (l)
                             <div class="input-container__data-container">
-                                <input type="range" name="" id="slider_data_2">
-                                <div class="input-container__value" id="text_data_2">100</div>
+                                <input type="range" name="" id="length_range_value">
+                                <div class="input-container__value" id="length_range_text">100</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="form__input-container">
+                        <label>Constante elástica del resorte (k)
+                            <div class="input-container__data-container">
+                                <input type="range" name="" id="k_range_value">
+                                <div class="input-container__value" id="k_range_text">100</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="form__input-container">
+                        <label>Fase inicial (rad)
+                            <div class="input-container__data-container">
+                                <input type="range" name="" id="phase_range_value">
+                                <div class="input-container__value" id="phase_range_text">100</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="form__input-container">
+                        <label>Inclinación inicial (rad)
+                            <div class="input-container__data-container">
+                                <input type="range" name="" id="initialInclination_range_value">
+                                <div class="input-container__value" id="initialInclination_range_text">100</div>
                             </div>
                         </label>
                     </div>
                 </form>
-                <button id="startButton">Comenzar</button>
             </fieldset>
+            <div class="form__button-container">
+                <button class="form__button" id="updateDataButton">Actualizar Datos</button>
+                <button class="form__button" id="startAnimButton">Pausar Animación</button>
+            </div>
             <script src="slidersValueScript.js"></script>
         </div>
     </main>
     <section class="sim">
-        <div class="sim__container">
-            assas
+        <div class="sim__container" id="sim_container">
+            <script src="simultationScript.js"></script>
+        </div>
+        <div class="graph__container">
+            
         </div>
     </section>
     <footer class="footer">
