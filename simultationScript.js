@@ -21,6 +21,9 @@ let posicionActual; //  ángulo de inclinación de la barra
 let velocidadActual; // velocidad de la barra
 let aceleracionActual; //   aceleración de la barra
 
+let grafica;
+
+
 document.addEventListener('slidersDataUpdated', function(e) {
     const sliderData = e.detail;
     console.log('Datos recibidos:', sliderData);
@@ -30,6 +33,9 @@ document.addEventListener('slidersDataUpdated', function(e) {
     k = parseFloat(sliderData.k);
     phi = parseFloat(sliderData.phi);
     inclinacionInicial = parseFloat(sliderData.inclinacionInicial);
+
+    frecuenciaVibracion = Math.sqrt(3 * k / m - 6 * g / l);
+    actualizarGrafica();
 });
 
 document.addEventListener('startAnimation', function(e)
@@ -44,6 +50,7 @@ function setup() {
     let canvas = createCanvas(canvasWidth, canvasHeight);
     canvas.parent('sim_container'); // Asocia el canvas con el div
     noLoop();
+    crearGrafica(); 
 }
 
 function draw() {
@@ -80,7 +87,7 @@ function draw() {
 function drawSpring(x1, y1, x2, y2) 
 {
     //line(x1, y1, x2, y2);
-    let numCoils = 10;
+    let numCoils = 50;
     let springLength = dist(x1, y1, x2, y2);
     let coilSpacing = springLength / numCoils;
     
@@ -131,3 +138,155 @@ function calcularAceleracion()
     return -inclinacionInicial * frecuenciaVibracion**2 * cos(frecuenciaVibracion * t + phi);
 }
 
+function generarDatosGrafica(duracion, pasos) {
+    let datos = {
+        angulo: [],
+        velocidad: [],
+        aceleracion: []
+    };
+    for (let i = 0; i <= pasos; i++) {
+        let tiempo = (i / pasos) * duracion;
+        let angulo = inclinacionInicial * Math.cos(frecuenciaVibracion * tiempo + phi);
+        let velocidad = -inclinacionInicial * frecuenciaVibracion * Math.sin(frecuenciaVibracion * tiempo + phi);
+        let aceleracion = -inclinacionInicial * Math.pow(frecuenciaVibracion, 2) * Math.cos(frecuenciaVibracion * tiempo + phi);
+        
+        datos.angulo.push({x: tiempo, y: angulo});
+        datos.velocidad.push({x: tiempo, y: velocidad});
+        datos.aceleracion.push({x: tiempo, y: aceleracion});
+    }
+    return datos;
+}
+
+function crearGrafica() {
+    let ctx = document.getElementById('grafica').getContext('2d');
+    grafica = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [{
+                label: 'Ángulo',
+                data: generarDatosGrafica(10, 1000),  // Aumentamos a 1000 puntos
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderWidth: 2,
+                pointRadius: 0,
+                fill: false,
+                tension: 0.4
+            }, {
+                label: 'Velocidad',
+                data: generarDatosGrafica(10, 1000),
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderWidth: 2,
+                pointRadius: 0,
+                fill: false,
+                tension: 0.4
+            }, {
+                label: 'Aceleración',
+                data: generarDatosGrafica(10, 1000),
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderWidth: 2,
+                pointRadius: 0,
+                fill: false,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {
+                duration: 0
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index',
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20,
+                        font: {
+                            size: 14
+                        }
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Ángulo, Velocidad y Aceleración vs Tiempo',
+                    font: {
+                        size: 18,
+                        weight: 'bold'
+                    },
+                    padding: {
+                        top: 10,
+                        bottom: 30
+                    }
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                }
+            },
+            scales: {
+                x: {
+                    type: 'linear',
+                    position: 'bottom',
+                    title: {
+                        display: true,
+                        text: 'Tiempo (s)',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            size: 12
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Valor',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            size: 12
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)'
+                    }
+                }
+            }
+        }
+    });
+}
+
+function actualizarGrafica() {
+    let datos = generarDatosGrafica(10, 1000);
+    grafica.data.datasets[0].data = datos.angulo;
+    grafica.data.datasets[1].data = datos.velocidad;
+    grafica.data.datasets[2].data = datos.aceleracion;
+    
+    let maxValor = Math.max(
+        Math.abs(inclinacionInicial),
+        Math.abs(inclinacionInicial * frecuenciaVibracion),
+        Math.abs(inclinacionInicial * Math.pow(frecuenciaVibracion, 2))
+    );
+    
+    grafica.options.scales.y.min = -maxValor * 1.1;
+    grafica.options.scales.y.max = maxValor * 1.1;
+    
+    grafica.update();
+}

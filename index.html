@@ -3,15 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulación de Movimiento Armónico Simple</title>
+    <title>Simulación del Movimiento Armónico Simple</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="Assets\Images\favicon.png" type="image/png">
-    <meta name="Author" content="Jesús Parra, Elkin Morillo, Anderson Vinasco, Paulo Chamorro, Alejandro Cárdenas">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.js"></script>
 </head>
 <body>
     <header class="header">
-        <nav class="header__nav">
+        <nav class="nav">
             <ul class="nav__list">
                 <li class="nav__list-item">
                     <a href="#sim-data" class="nav__list-link">Movimiento Armónico Simple</a>
@@ -19,73 +16,77 @@
             </ul>
         </nav>
     </header>
-    <main class="form">
-        <div class="form__container" id = "sim-data">
+
+    <main class="form" role="main">
+        <div id="sim-data" class="form__container">
             <h1 class="form__title">Simulación del Movimiento Armónico Simple</h1>
-            <fieldset class="form__fieldset">
-                <legend>Datos de la simulación</legend>
-                <form action="" class="form__form">
-                    <div class="form__input-container">
-                        <label>Masa de la barra (kg)
-                            <div class="input-container__data-container">
-                                <input type="range" name="" id="mass_range_value">
-                                <div class="input-container__value" id="mass_range_text">100</div>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="form__input-container">
-                        <label>Longitud de la barra (l)
-                            <div class="input-container__data-container">
-                                <input type="range" name="" id="length_range_value">
-                                <div class="input-container__value" id="length_range_text">100</div>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="form__input-container">
-                        <label>Constante elástica del resorte (k)
-                            <div class="input-container__data-container">
-                                <input type="range" name="" id="k_range_value">
-                                <div class="input-container__value" id="k_range_text">100</div>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="form__input-container">
-                        <label>Fase inicial (rad)
-                            <div class="input-container__data-container">
-                                <input type="range" name="" id="phase_range_value">
-                                <div class="input-container__value" id="phase_range_text">100</div>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="form__input-container">
-                        <label>Inclinación inicial (rad)
-                            <div class="input-container__data-container">
-                                <input type="range" name="" id="initialInclination_range_value">
-                                <div class="input-container__value" id="initialInclination_range_text">100</div>
-                            </div>
-                        </label>
-                    </div>
-                </form>
-            </fieldset>
-            <div class="form__button-container">
-                <button class="form__button" id="updateDataButton">Actualizar Datos</button>
-                <button class="form__button" id="startAnimButton">Pausar Animación</button>
+
+            <div class="form__input-container">
+                <label for="mass_range_value">Masa de la barra (kg)</label>
+                <div class="input-container__data-container">
+                    <input type="range" id="mass_range_value">
+                    <span id="mass_range_text" class="input-container__value"></span>
+                </div>
             </div>
-            <script src="slidersValueScript.js"></script>
+
+            <div class="form__input-container">
+                <label for="length_range_value">Longitud de la barra (l)</label>
+                <div class="input-container__data-container">
+                    <input type="range" id="length_range_value">
+                    <span id="length_range_text" class="input-container__value"></span>
+                </div>
+            </div>
+
+            <div class="form__input-container">
+                <label for="k_range_value">Constante elástica del resorte (k)</label>
+                <div class="input-container__data-container">
+                    <input type="range" id="k_range_value">
+                    <span id="k_range_text" class="input-container__value"></span>
+                </div>
+            </div>
+
+            <div class="form__input-container">
+                <label for="phase_range_value">Fase inicial (rad)</label>
+                <div class="input-container__data-container">
+                    <input type="range" id="phase_range_value">
+                    <span id="phase_range_text" class="input-container__value"></span>
+                </div>
+            </div>
+
+            <div class="form__input-container">
+                <label for="initialInclination_range_value">Inclinación inicial (rad)</label>
+                <div class="input-container__data-container">
+                    <input type="range" id="initialInclination_range_value">
+                    <span id="initialInclination_range_text" class="input-container__value"></span>
+                </div>
+            </div>
+
+            <div class="form__button-container">
+                <button id="updateDataButton" class="form__button">Actualizar Datos</button>
+                <button id="startAnimButton" class="form__button">Pausar Animación</button>
+            </div>
         </div>
     </main>
+
     <section class="sim">
-        <div class="sim__container" id="sim_container">
-            <script src="simultationScript.js"></script>
-        </div>
+        <div id="sim_container" class="sim__container"></div>
+    </section>
+    <section class="graph">
         <div class="graph__container">
-            
+            <canvas id="grafica"></canvas>
         </div>
     </section>
+
     <footer class="footer">
         <p class="footer__p">
-            Proyecto realizado por Jesús Parra, Elkin Morillo, Anderson Vinasco, Paulo Chamorro y Alejandro Cárdenas
+            Proyecto realizado por Jesús Parra, Elkin Morillo, Anderson Vinasco,
+            Paulo Chamorro y Alejandro Cárdenas
         </p>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="slidersValueScript.js"></script>
+    <script src="simultationScript.js"></script>
 </body>
 </html>
