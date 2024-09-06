@@ -5,13 +5,10 @@ let t = 0; // tiempo
 let dt = 0.02; // incremento de tiempo
 
 /* Variables de entrada de usuario */
-
 let m = 5; // masa del resorte
 let l = 20*10; // longitud de la barra
-
 let k = 10; // constante elástica
 let phi = 0; // fase inicial
-
 let inclinacionInicial = 0; // ángulo inicial para perturbar el sistema
 
 /* variables de Cálculos */
@@ -28,20 +25,19 @@ document.addEventListener('slidersDataUpdated', function(e) {
     const sliderData = e.detail;
     console.log('Datos recibidos:', sliderData);
     m = parseFloat(sliderData.masa);
-    l = parseFloat(sliderData.l); // ajustar a tamaño final en pixeles
-    l = l*10;
+    l = parseFloat(sliderData.l) * 10; // ajustar a tamaño final en pixeles
     k = parseFloat(sliderData.k);
     phi = parseFloat(sliderData.phi);
     inclinacionInicial = parseFloat(sliderData.inclinacionInicial);
 
     frecuenciaVibracion = Math.sqrt(3 * k / m - 6 * g / l);
     actualizarGrafica();
+    actualizarVariables();
 });
 
-document.addEventListener('startAnimation', function(e)
-{
+document.addEventListener('startAnimation', function(e) {
     pauseAnimation();
-})
+});
 
 function setup() {
     let canvasDiv = document.getElementById('sim_container');
@@ -50,7 +46,8 @@ function setup() {
     let canvas = createCanvas(canvasWidth, canvasHeight);
     canvas.parent('sim_container'); // Asocia el canvas con el div
     noLoop();
-    crearGrafica(); 
+    crearGrafica();
+    actualizarVariables();
 }
 
 function draw() {
@@ -61,7 +58,9 @@ function draw() {
     rect(20, 20, 600, 10);
     
     // Calcula el ángulo de la barra en función del tiempo
-    let posicionActual = calcularPosicion();
+    posicionActual = calcularPosicion();
+    velocidadActual = calcularVelocidad();
+    aceleracionActual = calcularAceleracion();
     
     // Traslada el sistema de coordenadas
     translate(240 + (l / 2) - 20, 200 + 5);
@@ -81,6 +80,8 @@ function draw() {
     
     // Incrementa el tiempo
     t += dt;
+    
+    actualizarVariables();
 }
 
 // Función para dibujar el resorte
@@ -273,6 +274,7 @@ function crearGrafica() {
     });
 }
 
+
 function actualizarGrafica() {
     let datos = generarDatosGrafica(10, 1000);
     grafica.data.datasets[0].data = datos.angulo;
@@ -289,4 +291,20 @@ function actualizarGrafica() {
     grafica.options.scales.y.max = maxValor * 1.1;
     
     grafica.update();
+}
+
+
+function actualizarVariables() {
+    let periodo = 2 * Math.PI / frecuenciaVibracion;
+    let amplitud = inclinacionInicial;
+    let energiaTotal = 0.5 * k * Math.pow(amplitud, 2);
+    let energiaCinetica = 0.5 * m * Math.pow(velocidadActual, 2);
+    let energiaPotencial = energiaTotal - energiaCinetica;
+
+    document.getElementById('periodo').textContent = periodo.toFixed(3) + ' s';
+    document.getElementById('frecuenciaAngular').textContent = frecuenciaVibracion.toFixed(3) + ' rad/s';
+    document.getElementById('amplitud').textContent = amplitud.toFixed(3) + ' rad';
+    document.getElementById('energiaTotal').textContent = energiaTotal.toFixed(3) + ' J';
+    document.getElementById('energiaCinetica').textContent = energiaCinetica.toFixed(3) + ' J';
+    document.getElementById('energiaPotencial').textContent = energiaPotencial.toFixed(3) + ' J';
 }

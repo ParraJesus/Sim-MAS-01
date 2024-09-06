@@ -259,3 +259,47 @@ canvas {
         width: 100%;
     }
 }
+
+/*---------------------------------------------Variables Section---------------------------------------------------*/
+
+
+.variables {
+    margin: 20px;
+}
+
+.variables__container {
+    background-color: var(--color-white);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.variables__container h2 {
+    color: var(--color-tertiary-green);
+    margin-bottom: 20px;
+}
+
+.variables__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.variable {
+    background-color: var(--color-main-gray);
+    padding: 15px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.variable__label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--color-secondary-green);
+}
+
+.variable__value {
+    font-size: 1.2em;
+    color: var(--font-main-color);
+}
