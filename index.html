@@ -3,89 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulación del Movimiento Armónico Simple</title>
+    <title>Simulación de Barra con Resorte</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header class="header">
-        <nav class="nav">
-            <ul class="nav__list">
-                <li class="nav__list-item">
-                    <a href="#sim-data" class="nav__list-link">Movimiento Armónico Simple</a>
-                </li>
-            </ul>
-        </nav>
+    <header>
+        <h1>Simulación de Barra con Resorte</h1>
     </header>
 
-    <main class="form" role="main">
-        <div id="sim-data" class="form__container">
-            <h1 class="form__title">Simulación del Movimiento Armónico Simple</h1>
-
-            <div class="form__input-container">
-                <label for="mass_range_value">Masa de la barra (kg)</label>
-                <div class="input-container__data-container">
-                    <input type="range" id="mass_range_value">
-                    <span id="mass_range_text" class="input-container__value"></span>
+    <main class="container">
+        <section class="controls">
+            <div class="slider-group">
+                <div class="slider-container">
+                    <label for="mass_range_value">Masa de la barra (kg):</label>
+                    <input type="range" id="mass_range_value" min="0" max="50" value="5" step="1">
+                    <span id="mass_range_text">5</span>
+                </div>
+                <div class="slider-container">
+                    <label for="length_range_value">Longitud de la barra (m):</label>
+                    <input type="range" id="length_range_value" min="1" max="20" value="20" step="1">
+                    <span id="length_range_text">20</span>
+                </div>
+                <div class="slider-container">
+                    <label for="k_range_value">Constante del resorte (N/m):</label>
+                    <input type="range" id="k_range_value" min="0" max="20" value="10" step="1">
+                    <span id="k_range_text">10</span>
+                </div>
+                <div class="slider-container">
+                    <label for="phase_range_value">Fase inicial (rad):</label>
+                    <input type="range" id="phase_range_value" min="0" max="6.28319" value="0" step="0.01">
+                    <span id="phase_range_text">0</span>
+                </div>
+                <div class="slider-container">
+                    <label for="initialInclination_range_value">Inclinación inicial (rad):</label>
+                    <input type="range" id="initialInclination_range_value" min="0" max="0.4" value="0" step="0.01">
+                    <span id="initialInclination_range_text">0</span>
                 </div>
             </div>
-
-            <div class="form__input-container">
-                <label for="length_range_value">Longitud de la barra (l)</label>
-                <div class="input-container__data-container">
-                    <input type="range" id="length_range_value">
-                    <span id="length_range_text" class="input-container__value"></span>
-                </div>
+            <div class="button-container">
+                <button id="updateDataButton">Actualizar Datos</button>
+                <button id="startAnimButton">Pausar/Iniciar Animación</button>
             </div>
+        </section>
 
-            <div class="form__input-container">
-                <label for="k_range_value">Constante elástica del resorte (k)</label>
-                <div class="input-container__data-container">
-                    <input type="range" id="k_range_value">
-                    <span id="k_range_text" class="input-container__value"></span>
-                </div>
-            </div>
+        <section class="simulation">
+            <div id="sim_container" class="sim__container"></div>
+        </section>
 
-            <div class="form__input-container">
-                <label for="phase_range_value">Fase inicial (rad)</label>
-                <div class="input-container__data-container">
-                    <input type="range" id="phase_range_value">
-                    <span id="phase_range_text" class="input-container__value"></span>
-                </div>
-            </div>
-
-            <div class="form__input-container">
-                <label for="initialInclination_range_value">Inclinación inicial (rad)</label>
-                <div class="input-container__data-container">
-                    <input type="range" id="initialInclination_range_value">
-                    <span id="initialInclination_range_text" class="input-container__value"></span>
-                </div>
-            </div>
-
-            <div class="form__button-container">
-                <button id="updateDataButton" class="form__button">Actualizar Datos</button>
-                <button id="startAnimButton" class="form__button">Pausar/Iniciar Animación</button>
-            </div>
-        </div>
-    </main>
-
-    <section class="sim">
-        <div id="sim_container" class="sim__container"></div>
-    </section>
-    <section class="graph">
-        <div class="graph__container">
+        <section class="graphs">
             <canvas id="grafica"></canvas>
-        </div>
-    </section>
-    <section class="sim">
-        <div id="sim_container" class="sim__container"></div>
-    </section>
-    <section class="graph">
-        <div class="graph__container">
-            <canvas id="grafica"></canvas>
-        </div>
-    </section>
-    <section class="variables">
-        <div class="variables__container">
+        </section>
+
+        <section class="variables">
             <h2>Variables de la Simulación</h2>
             <div class="variables__grid">
                 <div class="variable">
@@ -113,19 +82,16 @@
                     <span id="energiaPotencial" class="variable__value"></span>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <footer class="footer">
-        <p class="footer__p">
-            Proyecto realizado por Jesús Parra, Elkin Morillo, Anderson Vinasco,
-            Paulo Chamorro y Alejandro Cárdenas
-        </p>
+    <footer>
+        <p>Proyecto realizado por Jesús Parra, Elkin Morillo, Anderson Vinasco, Paulo Chamorro y Alejandro Cárdenas</p>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-    <script src="slidersValueScript.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="simultationScript.js"></script>
+    <script src="slidersValueScript.js"></script>
 </body>
 </html>

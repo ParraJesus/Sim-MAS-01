@@ -14,292 +14,161 @@
 
 * {
     box-sizing: border-box;
-    scroll-behavior: smooth;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    margin: 0;
-    font-family: 'Arial', sans-serif;
+    font-family: Arial, sans-serif;
     line-height: 1.6;
+    color: var(--font-main-color);
+    background-color: var(--color-white);
 }
 
-/*----------------------------------------------- Header Section ------------------------------------------------*/
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
 
-.header {
+header {
     background-color: var(--color-main-green);
-    width: 100%;
-    height: 80px;
-    display: flex;
-    justify-content: end;
-    align-items: center;
-    box-shadow: 0 0 5px var(--shadow-main-color);
-    overflow: hidden;
-}
-
-.nav__list {
-    display: flex;
-    justify-content: end;
-}
-
-.nav__list-item {
-    list-style: none;
-}
-
-.nav__list-link {
-    padding: 100px 20px;
-    background-color: transparent;
-    color: var(--font-main-color);
-    text-decoration: none;
-    transition: color 0.3s, background-color 0.3s;
-}
-
-.nav__list-link:is(:hover, :active) {
-    color: var(--color-white);
-    background-color: var(--color-secondary-green);
-}
-
-/*------------------------------------------------ Main Section ------------------------------------------------*/
-
-.form, .sim {
-    margin: 20px;
-}
-
-.form__container, .sim {
-    color: var(--font-main-color);
-    background-color: var(--color-main-gray);
-    box-shadow: 0 0 5px var(--shadow-main-color);
-    padding: 10px;
-    border-radius: 10px;
-    transition: box-shadow 0.3s ease;
-}
-
-.form__container:hover, .sim:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    color: var(--font-secondary-color);
+    text-align: center;
+    padding: 1rem;
 }
 
 h1 {
-    color: var(--color-tertiary-green);
-    text-align: center;
-    padding: 30px;
-    margin: 0;
-    font-size: 2.5rem;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    margin-bottom: 0;
 }
 
-.form__fieldset {
-    margin: 10px;
+.controls {
+    background-color: var(--color-main-gray);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
 }
 
-.form__form {
-    margin: 10px;
+.slider-group {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
 }
 
-.form__fieldset legend {
+.slider-container {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
     font-weight: bold;
 }
 
-.form__input-container {
-    color: var(--font-main-color);
-    margin: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.form__input-container label {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--color-secondary-green);
-}
-
-.input-container__data-container {
-    font-size: 1rem;
-    font-weight: normal;
-    text-align: center;
-    display: flex;
-    align-items: end;
-    gap: 20px;
-}
-
-.form__input-container input[type="range"] {
-    -webkit-appearance: none;
+input[type="range"] {
     width: 100%;
-    height: 8px;
-    border-radius: 5px;
-    background: #d3d3d3;
-    outline: none;
-    opacity: 0.7;
-    transition: opacity .2s, background .2s;
 }
 
-.form__input-container input[type="range"]:hover {
-    opacity: 1;
-    background: #c3c3c3;
-}
-
-.form__input-container input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--color-main-green);
-    cursor: pointer;
-    transition: background .2s;
-}
-
-.form__input-container input[type="range"]::-webkit-slider-thumb:hover {
-    background: var(--color-secondary-green);
-}
-
-.input-container__value {
-    color: #111;
-    font-weight: bold;
-}
-
-.form__button-container {
+.button-container {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 10px;
+    margin-top: 20px;
 }
 
-.form__button {
-    color: var(--color-white);
-    background-color: var(--color-tertiary-green);
-    letter-spacing: 3px;
-    padding: 10px 40px;
+button {
+    padding: 10px 20px;
+    background-color: var(--color-secondary-green);
+    color: var(--font-secondary-color);
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.1s;
+    transition: background-color 0.3s;
 }
 
-.form__button:hover {
-    background-color: var(--color-secondary-green);
+button:hover {
+    background-color: var(--color-tertiary-green);
 }
-
-.form__button:active {
-    transform: scale(0.98);
+.simulation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-main-gray);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 1200px; /* Ajusta este valor según tus necesidades */
+    height: 800px; /* Ajusta la altura según tus necesidades */
 }
-
-/*------------------------------------------------ Sim Section -------------------------------------------------*/
-
-.sim {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 20px;
+.sim__container {
+    width: 600px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+canvas {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+.simulation, .graphs {
     background-color: var(--color-white);
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.sim__container, .graph__container {
-    background-color: #FFF;
+#sim_container {
+    width: 100%;
     height: 300px;
-    border-radius: 5px;
-    overflow: hidden;
+    background-color: var(--color-main-gray);
 }
 
 canvas {
-    border: 1px solid var(--color-main-gray);
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
 }
-
-/*----------------------------------------------- Footer Section -----------------------------------------------*/
-
-.footer {
-    padding: 60px 10px;
-    text-transform: capitalize;
-    background-color: var(--color-main-green);
-    color: var(--font-secondary-color);
-    box-shadow: 0 0 5px var(--shadow-main-color);
-}
-
-.footer__p {
-    color: var(--font-third-color);
-    font-size: 1.2rem;
-    text-wrap: balance;
-    text-align: center;
-}
-
-/*----------------------------------------------- Movement Equation Section -----------------------------------------------*/
-.sim, .graph {
-    margin: 20px;
-}
-
-.graph__container {
-    background-color: #FFF;
-    height: 400px; /* Hacemos la gráfica más alta */
-    border-radius: 5px;
-    overflow: hidden;
-}
-
-canvas {
-    border: 1px solid var(--color-main-gray);
-    width: 100% !important;
-    height: 100% !important;
-}
-
-@media (max-width: 768px) {
-    .sim {
-        grid-template-columns: 1fr;
-    }
-    
-    .form__input-container {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .form__input-container input {
-        width: 100%;
-    }
-}
-
-/*---------------------------------------------Variables Section---------------------------------------------------*/
-
 
 .variables {
-    margin: 20px;
-}
-
-.variables__container {
-    background-color: var(--color-white);
-    border-radius: 10px;
+    background-color: var(--color-main-gray);
+    border-radius: 8px;
     padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.variables__container h2 {
+.variables h2 {
+    margin-bottom: 15px;
     color: var(--color-tertiary-green);
-    margin-bottom: 20px;
 }
 
 .variables__grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+    gap: 15px;
 }
 
 .variable {
-    background-color: var(--color-main-gray);
-    padding: 15px;
+    background-color: var(--color-white);
+    padding: 10px;
     border-radius: 5px;
-    display: flex;
-    flex-direction: column;
 }
 
 .variable__label {
     font-weight: bold;
-    margin-bottom: 5px;
     color: var(--color-secondary-green);
 }
 
-.variable__value {
-    font-size: 1.2em;
-    color: var(--font-main-color);
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: var(--color-main-green);
+    color: var(--font-secondary-color);
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .slider-group {
+        grid-template-columns: 1fr;
+    }
 }

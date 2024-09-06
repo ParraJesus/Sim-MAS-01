@@ -41,13 +41,17 @@ document.addEventListener('startAnimation', function(e) {
 
 function setup() {
     let canvasDiv = document.getElementById('sim_container');
-    let canvasWidth = canvasDiv.offsetWidth;
-    let canvasHeight = canvasDiv.offsetHeight;
-    let canvas = createCanvas(canvasWidth, canvasHeight);
-    canvas.parent('sim_container'); // Asocia el canvas con el div
+    let canvas = createCanvas(canvasDiv.offsetWidth, canvasDiv.offsetHeight);
+    canvas.parent('sim_container');
+    windowResized(); // Llamamos a esta función para asegurar que el canvas se ajuste correctamente
     noLoop();
     crearGrafica();
     actualizarVariables();
+}
+
+function windowResized() {
+    let canvasDiv = document.getElementById('sim_container');
+    resizeCanvas(canvasDiv.offsetWidth, canvasDiv.offsetHeight);
 }
 
 function draw() {
