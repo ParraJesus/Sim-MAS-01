@@ -136,7 +136,7 @@ header, footer
 
 .shadow-transition:is(:hover)
 {
-    transition: box-shadow 1s;
+    transition: box-shadow 0.3s;
     box-shadow: 0 0 6px #0006;
 }
 
