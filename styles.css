@@ -1,15 +1,15 @@
 :root {
-    --color-main-green: #6EAA78;
-    --color-secondary-green: #557064;
-    --color-tertiary-green: #465f4f;
-    --color-white: #FFF;
-    --color-black: #111;
-    --color-main-gray: #DBDFEA;
-    --font-main-color: #444;
-    --font-secondary-color: #FFF;
-    --font-third-color: #ddd;
+    --color-background-0: #fff;
+    --color-background-1: #f0f0f0;
+    --color-background-2: #7898a8;
+    --color-background-3: #686898;
+    --color-background-4: #e09363;
+    --font-color-0: #fff;
+    --font-color-1: #444;
+    --font-color-2: #666;
+    --shadow-color-1: #0006;
+    --shadow-color-2: #000A;
     --font-size: 12px;
-    --shadow-main-color: #000A;
 }
 
 * {
@@ -19,10 +19,15 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: sans-serif;
     line-height: 1.6;
-    color: var(--font-main-color);
-    background-color: var(--color-white);
+    color: var(--font-color-2);
+    background-color: var(--color-background-0);
+}
+
+h2 {
+    margin-bottom: 15px;
+    color: var(--color-background-3);
 }
 
 .container {
@@ -32,21 +37,23 @@ body {
 }
 
 header {
-    background-color: var(--color-main-green);
-    color: var(--font-secondary-color);
+    background-color: var(--color-background-2);
+    color: var(--font-color-0);
     text-align: center;
     padding: 1rem;
 }
 
-h1 {
-    margin-bottom: 0;
-}
-
-.controls {
-    background-color: var(--color-main-gray);
+.controls-section, .simulation-section, .graphs-section, .variables-section {
+    background-color: var(--color-background-1);
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
+    transition: box-shadow 0.3s;
+}
+
+.shadow-transition:is(:hover)
+{
+    box-shadow: 0 0 10px #0006;
 }
 
 .slider-group {
@@ -77,83 +84,45 @@ input[type="range"] {
 }
 
 button {
-    padding: 10px 20px;
-    background-color: var(--color-secondary-green);
-    color: var(--font-secondary-color);
+    padding: 12px 40px;
+    background-color: var(--color-background-2);
+    color: var(--color-background-0);
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.2s;
+    font-size: 1.2rem;
 }
 
-button:hover {
-    background-color: var(--color-tertiary-green);
+button:hover{
+    opacity: 70%;
 }
+
 .simulation {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--color-main-gray);
-    border-radius: 8px;
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 1200px;
 }
+
 .sim__container {
-    width: 600px;
-    background-color: var(--color-main-gray);
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100%;
+    height: 300px;
 }
+
 canvas {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-}
-.simulation, .graphs {
-    background-color: var(--color-main-gray);
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-}
-
-.graphs-container
-{
-    background-color: var(--color-white);
-}
-
-#sim_container {
-    width: 100%;
-    height: 300px;
-    background-color: var(--color-main-gray);
-}
-
-header, footer
-{
-    box-shadow: 0 0 4px #000;
-}
-
-.shadow-transition:is(:hover)
-{
-    transition: box-shadow 0.3s;
-    box-shadow: 0 0 6px #0006;
-}
-
-canvas {
     width: 100% !important;
     height: auto !important;
 }
 
-.variables {
-    background-color: var(--color-main-gray);
-    border-radius: 8px;
-    padding: 20px;
-}
-
-.variables h2 {
-    margin-bottom: 15px;
-    color: var(--color-tertiary-green);
+.graphs-container
+{
+    background-color: var(--color-background-1);
 }
 
 .variables__grid {
@@ -163,22 +132,27 @@ canvas {
 }
 
 .variable {
-    background-color: var(--color-white);
+    background-color: var(--color-background-0);
     padding: 10px;
     border-radius: 5px;
 }
 
 .variable__label {
     font-weight: bold;
-    color: var(--color-secondary-green);
+    color: var(--color-background-3);
 }
 
 footer {
     text-align: center;
     padding: 20px;
-    background-color: var(--color-main-green);
-    color: var(--font-secondary-color);
+    background-color: var(--color-background-2);
+    color: var(--font-color-0);
     margin-top: 20px;
+}
+
+header, footer
+{
+    box-shadow: 0 0 10px var(--shadow-color-2);
 }
 
 @media (max-width: 768px) {

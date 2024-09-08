@@ -12,7 +12,8 @@
     </header>
 
     <main class="container">
-        <section class="controls shadow-transition">
+        <section class="controls-section shadow-transition">
+            <h2>Datos</h2>
             <div class="slider-group">
                 <div class="slider-container">
                     <label for="mass_range_value">Masa de la barra (kg):</label>
@@ -42,21 +43,23 @@
             </div>
             <div class="button-container">
                 <button id="updateDataButton">Actualizar Datos</button>
-                <button id="startAnimButton">Iniciar/Pausar Animación</button>
+                <button id="startAnimButton">Iniciar Animación</button>
             </div>
         </section>
 
-        <section class="simulation shadow-transition">
+        <section class="simulation-section shadow-transition">
+            <h2>Simulación</h2>
             <div id="sim_container" class="sim__container"></div>
         </section>
 
-        <section class="graphs shadow-transition">
+        <section class="graphs-section shadow-transition">
+            <h2>Gráfica</h2>
             <div class="graphs-container">
                 <canvas id="grafica"></canvas>
             </div>
         </section>
 
-        <section class="variables shadow-transition">
+        <section class="variables-section shadow-transition">
             <h2>Variables de la Simulación</h2>
             <div class="variables__grid">
                 <div class="variable">
@@ -88,7 +91,7 @@
     </main>
 
     <footer>
-        <p>Proyecto realizado por Jesús Parra, Elkin Morillo, Anderson Vinasco, Paulo Chamorro y Alejandro Cárdenas</p>
+        <p>Proyecto realizado por Alejandro Cárdenas, Jesús Parra, Elkin Morillo, Anderson Vinasco y Paulo Chamorro</p>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>

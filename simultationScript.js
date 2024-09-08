@@ -55,10 +55,11 @@ function windowResized() {
 }
 
 function draw() {
-    background("#DBDFEA");
+    translate(innerWidth/6, 0);
+    background("#f0f0f0");
     
     // Dibuja el techo
-    fill("#000");
+    fill("#686898");
     rect(20, 20, 600, 10);
     
     // Calcula el ángulo de la barra en función del tiempo
@@ -170,8 +171,8 @@ function crearGrafica() {
             datasets: [{
                 label: 'Ángulo',
                 data: generarDatosGrafica(10, 1000),  // Aumentamos a 1000 puntos
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: '#a8f808',
+                backgroundColor: '#a8f80844',
                 borderWidth: 2,
                 pointRadius: 0,
                 fill: false,
@@ -179,8 +180,8 @@ function crearGrafica() {
             }, {
                 label: 'Velocidad',
                 data: generarDatosGrafica(10, 1000),
-                borderColor: 'rgba(255, 99, 132, 1)',
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: '#8080f8',
+                backgroundColor: '#8080f844',
                 borderWidth: 2,
                 pointRadius: 0,
                 fill: false,
@@ -188,8 +189,8 @@ function crearGrafica() {
             }, {
                 label: 'Aceleración',
                 data: generarDatosGrafica(10, 1000),
-                borderColor: 'rgba(54, 162, 235, 1)',
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: '#b808f8',
+                backgroundColor: '#b808f844',
                 borderWidth: 2,
                 pointRadius: 0,
                 fill: false,

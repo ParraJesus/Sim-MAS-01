@@ -1,3 +1,7 @@
+const updateDataButton = document.getElementById("updateDataButton");
+const startAnimButton = document.getElementById("startAnimButton");
+let isAnimationPlaying = false;
+
 //  inicializa los sliders a conveniencia, recibe el id del range y del texto mostrado en pantalla, además de un máximo y un mínimo para los valores iniciales
 function initializeSlider(sliderId, textId, min, max, initialValue, step) 
 {
@@ -11,7 +15,9 @@ function initializeSlider(sliderId, textId, min, max, initialValue, step)
 
     text.textContent = slider.value;
 
-    slider.addEventListener("input", function() { text.textContent = slider.value; });
+    slider.addEventListener("input", function() { text.textContent = slider.value;
+        updateDataButton.style.backgroundColor = "#e09363";
+    });
 }
 
 //  almacena en una variable la información de los input range
@@ -29,6 +35,8 @@ function getSliderData() {
         detail: data
     });
 
+    updateDataButton.style.backgroundColor = "#7898a8";
+
     // dispara el evento
     document.dispatchEvent(onSlidersDataUpdated);
 }
@@ -36,6 +44,16 @@ function getSliderData() {
 function startAnim()
 {
     const onStartAnimation = new CustomEvent('startAnimation');
+
+    if(isAnimationPlaying) {
+        startAnimButton.innerHTML = "Reanudar Animación";
+        isAnimationPlaying = false;
+    }
+    else {
+        startAnimButton.innerHTML = "Pausar Animación";
+        isAnimationPlaying = true;
+    }
+
     document.dispatchEvent(onStartAnimation);
 }
 
@@ -46,5 +64,5 @@ initializeSlider("k_range_value", "k_range_text", 0, 20, 10, 1);
 initializeSlider("phase_range_value", "phase_range_text", 0, 6.28319, 0, 0.01);
 initializeSlider("initialInclination_range_value", "initialInclination_range_text", 0, 0.4, 0, 0.01);
 
-document.getElementById("updateDataButton").addEventListener("click", getSliderData);
-document.getElementById("startAnimButton").addEventListener("click", startAnim);
+updateDataButton.addEventListener("click", getSliderData);
+startAnimButton.addEventListener("click", startAnim);
