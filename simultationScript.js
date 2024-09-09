@@ -5,6 +5,7 @@ let t = 0; // tiempo
 let dt = 0.02; // incremento de tiempo
 
 /* Variables de entrada de usuario */
+//Las variables aquí definidas son para inicializar el sistema, se pueden editar en el sistema
 let m = 5; // masa del resorte
 let l = 20*10; // longitud de la barra
 let k = 10; // constante elástica
@@ -88,7 +89,6 @@ function draw() {
     
     actualizarVariables();
 }
-
 // Función para dibujar el resorte
 function drawSpring(x1, y1, x2, y2) 
 {
@@ -279,7 +279,6 @@ function crearGrafica() {
     });
 }
 
-
 function actualizarGrafica() {
     let datos = generarDatosGrafica(10, 1000);
     grafica.data.datasets[0].data = datos.angulo;
@@ -297,7 +296,6 @@ function actualizarGrafica() {
     
     grafica.update();
 }
-
 
 function actualizarVariables() {
     let periodo = 2 * Math.PI / frecuenciaVibracion;
