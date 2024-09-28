@@ -5,16 +5,19 @@ let t = 0; // tiempo
 let dt = 0.02; // incremento de tiempo
 
 /* Variables de entrada de usuario */
-//Las variables aquí definidas son para inicializar el sistema, se pueden editar en el sistema
 let m = 5; // masa del resorte
 let l = 20*10; // longitud de la barra
 let k = 10; // constante elástica
-let phi = 0; // fase inicial
-let inclinacionInicial = 0; // ángulo inicial para perturbar el sistema
+let posicionInicial = 1; //Condición inicial del sistema
+let velocidadInicial = 1; //Condición inicial del sistema
 
 /* variables de Cálculos */
 
-let frecuenciaVibracion = Math.sqrt(3 * k / m - 6 * g / l); //Fórmula de la frecuencia de vibración
+let frecuenciaVibracion = Math.sqrt(3 * k / m); //Fórmula de la frecuencia de vibración
+let phi = 0; // fase inicial que se halla a partir de las condiciones iniciales
+let amplitud = 0; // amplitud del sistema que se halla a partir de las condiciones iniciales
+
+/*Variables de la Animación*/
 let posicionActual; //  ángulo de inclinación de la barra
 let velocidadActual; // velocidad de la barra
 let aceleracionActual; //   aceleración de la barra
@@ -28,10 +31,12 @@ document.addEventListener('slidersDataUpdated', function(e) {
     m = parseFloat(sliderData.masa);
     l = parseFloat(sliderData.l) * 10; // ajustar a tamaño final en pixeles
     k = parseFloat(sliderData.k);
-    phi = parseFloat(sliderData.phi);
-    inclinacionInicial = parseFloat(sliderData.inclinacionInicial);
+    posicionInicial = parseFloat(sliderData.posicionInicial);
+    velocidadInicial = parseFloat(sliderData.velocidadInicial);
+    frecuenciaVibracion = calcularFrecuenciaVibracion();
+    phi = calcularPhi();
+    amplitud = calcularAmplitud();
 
-    frecuenciaVibracion = Math.sqrt(3 * k / m - 6 * g / l);
     actualizarGrafica();
     actualizarVariables();
 });
@@ -56,7 +61,6 @@ function windowResized() {
 }
 
 function draw() {
-    translate(innerWidth/6, 0);
     background("#f0f0f0");
     
     // Dibuja el techo
@@ -89,6 +93,7 @@ function draw() {
     
     actualizarVariables();
 }
+
 // Función para dibujar el resorte
 function drawSpring(x1, y1, x2, y2) 
 {
@@ -126,22 +131,59 @@ function pauseAnimation()
     }
 }
 
+/*Funciones para evaluar las fórmulas*/
+
+function calcularFrecuenciaVibracion()
+{
+    //Fórmula w0
+    return Math.sqrt(3 * k / m);
+}
+
+function calcularPhi()
+{
+    let phiAux = 0;
+    if(posicionInicial > 0 || posicionInicial < 0)
+    {
+        phiAux = Math.atan2(-velocidadInicial, (frecuenciaVibracion * posicionInicial));
+    }
+    else
+    {
+        if(velocidadInicial > 0)
+        {
+            phiAux = (3 * Math.PI)/2
+        }
+        else
+        {
+            phiAux = (Math.PI)/2
+        }
+    }
+    return phiAux;
+}
+
+function calcularAmplitud()
+{
+    let amplitudAux;
+
+    amplitudAux = posicionInicial/Math.cos(phi);
+    return amplitudAux;
+}
+
 function calcularPosicion()
 {
     //  fórmula de la posición
-    return inclinacionInicial * cos(frecuenciaVibracion * t + phi);
+    return amplitud * cos(frecuenciaVibracion * t + phi);
 }
 
 function calcularVelocidad()
 {
     //  fórmula de la velocidad
-    return -inclinacionInicial * frecuenciaVibracion * sin(frecuenciaVibracion * t + phi);
+    return -amplitud * frecuenciaVibracion * sin(frecuenciaVibracion * t + phi);
 }
 
 function calcularAceleracion()
 {
     //  fórmula de la aceleración
-    return -inclinacionInicial * frecuenciaVibracion**2 * cos(frecuenciaVibracion * t + phi);
+    return -amplitud * frecuenciaVibracion**2 * cos(frecuenciaVibracion * t + phi);
 }
 
 function generarDatosGrafica(duracion, pasos) {
@@ -152,10 +194,9 @@ function generarDatosGrafica(duracion, pasos) {
     };
     for (let i = 0; i <= pasos; i++) {
         let tiempo = (i / pasos) * duracion;
-        let angulo = inclinacionInicial * Math.cos(frecuenciaVibracion * tiempo + phi);
-        let velocidad = -inclinacionInicial * frecuenciaVibracion * Math.sin(frecuenciaVibracion * tiempo + phi);
-        let aceleracion = -inclinacionInicial * Math.pow(frecuenciaVibracion, 2) * Math.cos(frecuenciaVibracion * tiempo + phi);
-        
+        let angulo = amplitud * Math.cos(frecuenciaVibracion * tiempo + phi);
+        let velocidad = -amplitud * frecuenciaVibracion * Math.sin(frecuenciaVibracion * tiempo + phi);
+        let aceleracion = -amplitud * Math.pow(frecuenciaVibracion, 2) * Math.cos(frecuenciaVibracion * tiempo + phi);
         datos.angulo.push({x: tiempo, y: angulo});
         datos.velocidad.push({x: tiempo, y: velocidad});
         datos.aceleracion.push({x: tiempo, y: aceleracion});
@@ -286,11 +327,11 @@ function actualizarGrafica() {
     grafica.data.datasets[2].data = datos.aceleracion;
     
     let maxValor = Math.max(
-        Math.abs(inclinacionInicial),
-        Math.abs(inclinacionInicial * frecuenciaVibracion),
-        Math.abs(inclinacionInicial * Math.pow(frecuenciaVibracion, 2))
+        Math.abs(calcularAmplitud()),
+        Math.abs(calcularFrecuenciaVibracion()),
+        Math.abs(calcularFrecuenciaVibracion())
     );
-    
+
     grafica.options.scales.y.min = -maxValor * 1.1;
     grafica.options.scales.y.max = maxValor * 1.1;
     
@@ -299,14 +340,15 @@ function actualizarGrafica() {
 
 function actualizarVariables() {
     let periodo = 2 * Math.PI / frecuenciaVibracion;
-    let amplitud = inclinacionInicial;
     let energiaTotal = 0.5 * k * Math.pow(amplitud, 2);
     let energiaCinetica = 0.5 * m * Math.pow(velocidadActual, 2);
     let energiaPotencial = energiaTotal - energiaCinetica;
 
+    document.getElementById('faseInicial').textContent = calcularPhi().toFixed(3) + ' rad';
+    document.getElementById('amplitud').textContent = calcularAmplitud().toFixed(3) + ' rad';
+    document.getElementById('frecuenciaVibracion').textContent = frecuenciaVibracion.toFixed(3) + ' rad/s';
+
     document.getElementById('periodo').textContent = periodo.toFixed(3) + ' s';
-    document.getElementById('frecuenciaAngular').textContent = frecuenciaVibracion.toFixed(3) + ' rad/s';
-    document.getElementById('amplitud').textContent = amplitud.toFixed(3) + ' rad';
     document.getElementById('energiaTotal').textContent = energiaTotal.toFixed(3) + ' J';
     document.getElementById('energiaCinetica').textContent = energiaCinetica.toFixed(3) + ' J';
     document.getElementById('energiaPotencial').textContent = energiaPotencial.toFixed(3) + ' J';

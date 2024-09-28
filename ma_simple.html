@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movimiento Armónico Simple</title>
+    <link rel="stylesheet" href="Styles/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Simulación de Barra con Resorte</h1>
+        <nav class="header-nav">
+            <ul class="header-list">
+                <li class="header-item">
+                    <a href="#data-container" class="header-link">Movimiento Armónico Simple</a>
+                </li>
+                <li class="header-item">
+                    <a href="ma_amortiguado.html" class="header-link">Movimiento Amortiguado</a>
+                </li>
+                <li class="header-item">
+                    <a href="ma_forzado.html" class="header-link">Movimiento Forzado</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="controls-section shadow-transition" id="data-container">
+            <h2>Datos de Movimiento Armónico Simple</h2>
+            <div class="slider-group">
+                <div class="slider-container">
+                    <label for="mass_range_value">Masa de la barra (kg):</label>
+                    <input type="range" id="mass_range_value">
+                    <span id="mass_range_text">5</span>
+                </div>
+                <div class="slider-container">
+                    <label for="length_range_value">Longitud de la barra (m):</label>
+                    <input type="range" id="length_range_value">
+                    <span id="length_range_text">20</span>
+                </div>
+                <div class="slider-container">
+                    <label for="k_range_value">Constante del resorte (N/m):</label>
+                    <input type="range" id="k_range_value">
+                    <span id="k_range_text">10</span>
+                </div>
+                <div class="slider-container">
+                    <label for="initialPos_range_value">Posición inicial (rad):</label>
+                    <input type="range" id="initialPos_range_value">
+                    <span id="initialPos_range_text">0</span>
+                </div>
+                <div class="slider-container">
+                    <label for="initialVel_range_value">Velocidad inicial inicial (rad/s):</label>
+                    <input type="range" id="initialVel_range_value">
+                    <span id="initialVel_range_text">0</span>
+                </div>
+            </div>
+            <div class="button-container">
+                <button id="updateDataButton">Actualizar Datos</button>
+                <button id="startAnimButton">Iniciar Animación</button>
+            </div>
+        </section>
+
+        <section class="simulation-section shadow-transition">
+            <h2>Simulación</h2>
+            <div id="sim_container" class="sim__container"></div>
+        </section>
+
+        <section class="graphs-section shadow-transition">
+            <h2>Gráfica</h2>
+            <div class="graphs-container">
+                <canvas id="grafica"></canvas>
+            </div>
+        </section>
+
+        <section class="variables-section shadow-transition">
+            <h2>Variables de la Simulación</h2>
+            <div class="variables__grid">
+                <div class="variable">
+                    <span class="variable__label">Fase inicial phi:</span>
+                    <span id="faseInicial" class="variable__value"></span>
+                </div>
+                <div class="variable">
+                    <span class="variable__label">Amplitud:</span>
+                    <span id="amplitud" class="variable__value"></span>
+                </div>
+                <div class="variable">
+                    <span class="variable__label">Frecuencia de vibración:</span>
+                    <span id="frecuenciaVibracion" class="variable__value"></span>
+                </div>
+                <div class="variable">
+                    <span class="variable__label">Periodo:</span>
+                    <span id="periodo" class="variable__value"></span>
+                </div>
+                <div class="variable">
+                    <span class="variable__label">Energía Total:</span>
+                    <span id="energiaTotal" class="variable__value"></span>
+                </div>
+                <div class="variable">
+                    <span class="variable__label">Energía Cinética:</span>
+                    <span id="energiaCinetica" class="variable__value"></span>
+                </div>
+                <div class="variable">
+                    <span class="variable__label">Energía Potencial:</span>
+                    <span id="energiaPotencial" class="variable__value"></span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Proyecto realizado por Alejandro Cárdenas, Jesús Parra, Elkin Morillo, Anderson Vinasco y Paulo Chamorro</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="Scripts/MAS_Sim_Script.js"></script>
+    <script src="Scripts/MAS_Slider_Value_Script.js"></script>
+</body>
+</html>

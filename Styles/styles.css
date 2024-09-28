@@ -3,6 +3,7 @@
     --color-background-1: #f0f0f0;
     --color-background-2: #7898a8;
     --color-background-3: #686898;
+    --color-background-5: #7085a4;
     --color-background-4: #e09363;
     --font-color-0: #fff;
     --font-color-1: #444;
@@ -16,6 +17,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    scroll-behavior: smooth;
 }
 
 body {
@@ -23,24 +25,60 @@ body {
     line-height: 1.6;
     color: var(--font-color-2);
     background-color: var(--color-background-0);
+
+}
+
+h1 {
+    text-align: center;
+    text-wrap: pretty;
 }
 
 h2 {
     margin-bottom: 15px;
     color: var(--color-background-3);
+    text-transform: capitalize;
+}
+
+header{
+    background-color: var(--color-background-2);
+    color: var(--font-color-0);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0 0 20px;
+}
+
+.header-list{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
+.header-item {
+    list-style: none;
+}
+
+.header-link {
+    display: inline-block;
+    align-content: center;
+    text-align: center;
+    background-color: var(--color-background-5);
+    color: var(--font-color-0);
+    text-decoration: none;
+    padding: 30px 10px;
+    transition: background-color 0.2s, text-decoration 0.2s;
+}
+
+.header-link:is(:hover, :active) {
+    color: var(--font-color-0);
+    background-color: var(--color-background-3);
+    text-decoration: underline;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-}
-
-header {
-    background-color: var(--color-background-2);
-    color: var(--font-color-0);
-    text-align: center;
-    padding: 1rem;
 }
 
 .controls-section, .simulation-section, .graphs-section, .variables-section {
@@ -55,47 +93,16 @@ header {
 {
     box-shadow: 0 0 10px #0006;
 }
+
+.slider-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
 .slider-container {
     display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.slider-container input[type="range"] {
-    flex-grow: 1;
-    margin-right: 10px;
-}
-
-.slider-container input[type="number"] {
-    width: 60px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    text-align: right;
-}
-
-.slider-container input[type="number"]:focus {
-    outline: none;
-    border-color: var(--color-background-2);
-    box-shadow: 0 0 0 2px rgba(120, 152, 168, 0.2);
-}
-
-.slider-container input[type="number"]:hover {
-    border-color: var(--color-background-3);
-}
-
-.slider-container span {
-    margin-left: 10px;
-    font-size: 14px;
-    color: var(--font-color-2);
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: var(--color-background-3);
+    flex-direction: column;
 }
 
 label {
@@ -154,6 +161,7 @@ canvas {
 .graphs-container
 {
     background-color: var(--color-background-1);
+    min-height: 400px;
 }
 
 .variables__grid {
@@ -184,11 +192,19 @@ footer {
 header, footer
 {
     box-shadow: 0 0 10px var(--shadow-color-2);
+    width: 100%;
 }
 
 @media (max-width: 768px) {
     .slider-group {
         grid-template-columns: 1fr;
     }
+    header {
+        flex-direction: column;
+        justify-content: center;
+        padding: 0;
+    }
+    h1 {
+        padding: 10px;
+    }
 }
-
