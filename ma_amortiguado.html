@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movimiento Armónico Simple</title>
+    <title>Movimiento Amortiguado</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -12,10 +12,10 @@
         <nav class="header-nav">
             <ul class="header-list">
                 <li class="header-item">
-                    <a href="#data-container" class="header-link">Movimiento Armónico Simple</a>
+                    <a href="ma_simple.html" class="header-link">Movimiento Armónico Simple</a>
                 </li>
                 <li class="header-item">
-                    <a href="ma_amortiguado.html" class="header-link">Movimiento Amortiguado</a>
+                    <a href="#data-container" class="header-link">Movimiento Amortiguado</a>
                 </li>
                 <li class="header-item">
                     <a href="ma_forzado.html" class="header-link">Movimiento Forzado</a>
@@ -26,7 +26,7 @@
 
     <main class="container">
         <section class="controls-section shadow-transition" id="data-container">
-            <h2>Datos de Movimiento Armónico Simple</h2>
+            <h2>Datos de Movimiento Amortiguado</h2>
             <div class="slider-group">
                 <div class="slider-container">
                     <label for="mass_range_value">Masa de la barra (kg):</label>
@@ -42,6 +42,11 @@
                     <label for="k_range_value">Constante del resorte (N/m):</label>
                     <input type="range" id="k_range_value">
                     <span id="k_range_text">10</span>
+                </div>
+                <div class="slider-container">
+                    <label for="b_range_value">Constante de amortiguamiento (Nm/s):</label>
+                    <input type="range" id="b_range_value">
+                    <span id="b_range_text">5</span>
                 </div>
                 <div class="slider-container">
                     <label for="initialPos_range_value">Posición inicial (rad):</label>
@@ -71,7 +76,7 @@
                 <canvas id="grafica"></canvas>
             </div>
         </section>
-
+        <!--
         <section class="variables-section shadow-transition">
             <h2>Variables de la Simulación</h2>
             <div class="variables__grid">
@@ -105,6 +110,7 @@
                 </div>
             </div>
         </section>
+        -->
     </main>
 
     <footer>
@@ -113,7 +119,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="Scripts/MAS_Sim_Script.js"></script>
-    <script src="Scripts/MAS_Slider_Value_Script.js"></script>
+    <script src="Scripts/MA_Sim_Script.js"></script>
+    <script src="Scripts/MA_Slider_Value_Script.js"></script>
 </body>
 </html>

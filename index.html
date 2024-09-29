@@ -3,105 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulación de Barra con Resorte</title>
+    <title>Página Principal</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
         <h1>Simulación de Barra con Resorte</h1>
+        <nav class="header-nav">
+            <ul class="header-list">
+                <li class="header-item">
+                    <a href="ma_simple.html" class="header-link">Movimiento Armónico Simple</a>
+                </li>
+                <li class="header-item">
+                    <a href="ma_amortiguado.html" class="header-link">Movimiento Amortiguado</a>
+                </li>
+                <li class="header-item">
+                    <a href="ma_forzado.html" class="header-link">Movimiento Forzado</a>
+                </li>
+            </ul>
+        </nav>
     </header>
 
-    <div class="container" role="main">
-        <section class="controls-section shadow-transition">
-            <h2>Datos</h2>
-            <div class="slider-group">
-                <div class="slider-container">
-                    <label for="mass_range_value">Masa de la barra (kg):</label>
-                    <input type="range" id="mass_range_value" min="0" max="50" value="5" step="1">
-                    <input type="number" id="mass_input_value" value="5" min="0" max="50" step="1">
-                    <span id="mass_range_text">5</span>
-                </div>
-                <div class="slider-container">
-                    <label for="length_range_value">Longitud de la barra (m):</label>
-                    <input type="range" id="length_range_value" min="1" max="20" value="20" step="1">
-                    <input type="number" id="length_input_value" value="20" min="1" max="20" step="1">
-                    <span id="length_range_text">20</span>
-                </div>
-                <div class="slider-container">
-                    <label for="k_range_value">Constante del resorte (N/m):</label>
-                    <input type="range" id="k_range_value" min="0" max="1000" value="10" step="1">
-                    <input type="number" id="k_input_value" value="10" min="0" max="1000" step="1">
-                    <span id="k_range_text">10</span>
-                </div>
-                <div class="slider-container">
-                    <label for="phase_range_value">Fase inicial (rad):</label>
-                    <input type="range" id="phase_range_value" min="0" max="6.28319" value="0" step="0.01">
-                    <input type="number" id="phase_input_value" value="0" min="0" max="6.28319" step="0.01">
-                    <span id="phase_range_text">0</span>
-                </div>
-                <div class="slider-container">
-                    <label for="initialInclination_range_value">Inclinación inicial (rad):</label>
-                    <input type="range" id="initialInclination_range_value" min="0" max="0.4" value="0" step="0.01">
-                    <input type="number" id="initialInclination_input_value" value="0" min="0" max="0.4" step="0.01">
-                    <span id="initialInclination_range_text">0</span>
-                </div>
-            </div>
-            <div class="button-container">
-                <button id="updateDataButton">Actualizar Datos</button>
-                <button id="startAnimButton">Iniciar Animación</button>
-            </div>
-        </section>
-
-        <section class="simulation-section shadow-transition">
-            <h2>Simulación</h2>
-            <div id="sim_container" class="sim__container"></div>
-        </section>
-
-        <section class="graphs-section shadow-transition">
-            <h2>Gráfica</h2>
-            <div class="graphs-container">
-                <canvas id="grafica"></canvas>
-            </div>
-        </section>
-
-        <section class="variables-section shadow-transition">
-            <h2>Variables de la Simulación</h2>
-            <div class="variables__grid">
-                <div class="variable">
-                    <span class="variable__label">Periodo:</span>
-                    <span id="periodo" class="variable__value"></span>
-                </div>
-                <div class="variable">
-                    <span class="variable__label">Frecuencia Angular:</span>
-                    <span id="frecuenciaAngular" class="variable__value"></span>
-                </div>
-                <div class="variable">
-                    <span class="variable__label">Amplitud:</span>
-                    <span id="amplitud" class="variable__value"></span>
-                </div>
-                <div class="variable">
-                    <span class="variable__label">Energía Total:</span>
-                    <span id="energiaTotal" class="variable__value"></span>
-                </div>
-                <div class="variable">
-                    <span class="variable__label">Energía Cinética:</span>
-                    <span id="energiaCinetica" class="variable__value"></span>
-                </div>
-                <div class="variable">
-                    <span class="variable__label">Energía Potencial:</span>
-                    <span id="energiaPotencial" class="variable__value"></span>
-                </div>
-            </div>
-        </section>
-    </div>
+    <main class="container">
+        
+    </main>
 
     <footer>
-        Proyecto realizado por Alejandro Cárdenas, Jesús Parra, Elkin Morillo, Anderson Vinasco y Paulo Chamorro
+        <p>Proyecto realizado por Alejandro Cárdenas, Jesús Parra, Elkin Morillo, Anderson Vinasco y Paulo Chamorro</p>
     </footer>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="simultationScript.js"></script>
-    <script src="slidersValueScript.js"></script>
 </body>
 </html>
