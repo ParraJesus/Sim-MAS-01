@@ -169,20 +169,35 @@ function calcularCoeficienteAmortiguamiento()
     return (6*b)/(m * (l)**2);
 }
 
+function calcularPhi(){
+    let w = calcularFrecuenciaVibracion();
+    let gamma = calcularCoeficienteAmortiguamiento();
+    let omega_d = Math.sqrt(w** 2 - gamma ** 2);
+
+    let phi = Math.atan2(-velocidadInicial-gamma*posicionInicial, (posicionInicial*omega_d));
+    return phi;
+}
+
+
+
 function calcularSubAmortiguado(time1)
 {
-    let zeta = calcularCoeficienteAmortiguamiento();
+    let gamma = calcularCoeficienteAmortiguamiento();
     let w = calcularFrecuenciaVibracion();
 
-    let omega_d = w * Math.sqrt(1 - zeta ** 2);
+    let omega_d = Math.sqrt(w** 2 - gamma ** 2);
 
-    let c1 = posicionInicial;
-    let c2 = (velocidadInicial + zeta * w * c1) / omega_d;
+    let phi = calcularPhi();
 
-    //Fórmulas de posición, velocidad y aceleración
-    let posicionAux = Math.exp(-zeta * w * time1) * (c1 * Math.cos(omega_d * time1) + c2 * Math.sin(omega_d * time1));
-    let velocidadAux = Math.exp(-zeta * w * time1) * (-c1 * omega_d * Math.sin(omega_d * time1) + c2 * omega_d * Math.cos(omega_d * time1)) - zeta * w * posicionAux;
-    let aceleracionAux = -w * w * posicionAux - 2 * zeta * w * velocidadAux;
+    let amplitud_C = (posicionInicial/Math.cos(phi));
+
+
+
+    //Fórmulas de posición, velocidad y aceleracióng
+    let posicionAux = amplitud_C*Math.exp(-gamma*time1)*Math.cos(omega_d*time1+phi);
+    let velocidadAux = -amplitud_C*gamma*Math.exp(-gamma*time1)*Math.cos(omega_d*time1 + phi) -amplitud_C*Math.exp(-gamma*time1)*omega_d*Math.sin(omega_d*time1 + phi)
+    let aceleracionAux = amplitud_C*(gamma** 2)*Math.exp(-gamma*time1)*Math.cos(omega_d*time1 + phi) + amplitud_C*(gamma** 2)*Math.exp(-gamma*time1)*Math.sin(omega_d*time1 + phi) 
+    + amplitud_C*gamma*Math.exp(-gamma*time1)*omega_d*Math.sin(omega_d*time1 + phi) - amplitud_C*Math.exp(-gamma*time1)*(omega_d** 2)*Math.cos(omega_d*time1 + phi); 
 
     let movimientosSubAmortiguado = [posicionAux, velocidadAux, aceleracionAux];
 
@@ -411,18 +426,18 @@ function actualizarGrafica() {
 
 /*Funciones para manejar las variables */
 function actualizarVariables() {
-    /*
+    
     let periodo = 2 * Math.PI / frecuenciaVibracion;
     let energiaTotal = 0.5 * k * Math.pow(amplitud, 2);
     let energiaCinetica = 0.5 * m * Math.pow(velocidadActual, 2);
     let energiaPotencial = energiaTotal - energiaCinetica;
 
     document.getElementById('faseInicial').textContent = calcularPhi().toFixed(3) + ' rad';
-    document.getElementById('amplitud').textContent = calcularAmplitud().toFixed(3) + ' rad';
+    //document.getElementById('amplitud').textContent = calcularAmplitud().toFixed(3) + ' rad';
     document.getElementById('frecuenciaVibracion').textContent = frecuenciaVibracion.toFixed(3) + ' rad/s';
 
     document.getElementById('periodo').textContent = periodo.toFixed(3) + ' s';
     document.getElementById('energiaTotal').textContent = energiaTotal.toFixed(3) + ' J';
     document.getElementById('energiaCinetica').textContent = energiaCinetica.toFixed(3) + ' J';
-    document.getElementById('energiaPotencial').textContent = energiaPotencial.toFixed(3) + ' J';*/
+    document.getElementById('energiaPotencial').textContent = energiaPotencial.toFixed(3) + ' J';
 }
