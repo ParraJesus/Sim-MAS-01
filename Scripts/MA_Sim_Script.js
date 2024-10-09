@@ -175,7 +175,7 @@ function calcularPhi(){
     let omega_d = Math.sqrt(w** 2 - gamma ** 2);
 
     let phi = Math.atan2(-velocidadInicial-gamma*posicionInicial, (posicionInicial*omega_d));
-    return phi;
+    return Math.abs(phi);
 }
 
 
@@ -424,20 +424,33 @@ function actualizarGrafica() {
     grafica.update();
 }
 
+function calcularAmplitud(time1){
+
+    let phi = calcularPhi();
+    let constante = (posicionInicial/Math.cos(phi));
+    let gamma = calcularCoeficienteAmortiguamiento();
+
+    let amplitud = constante*Math.exp(-gamma*time1);
+
+    return amplitud;
+}
+
 /*Funciones para manejar las variables */
 function actualizarVariables() {
     
     let periodo = 2 * Math.PI / frecuenciaVibracion;
-    let energiaTotal = 0.5 * k * Math.pow(amplitud, 2);
+    /*let energiaTotal = 0.5 * k * Math.pow(amplitud, 2);
     let energiaCinetica = 0.5 * m * Math.pow(velocidadActual, 2);
     let energiaPotencial = energiaTotal - energiaCinetica;
 
-    document.getElementById('faseInicial').textContent = calcularPhi().toFixed(3) + ' rad';
-    //document.getElementById('amplitud').textContent = calcularAmplitud().toFixed(3) + ' rad';
-    document.getElementById('frecuenciaVibracion').textContent = frecuenciaVibracion.toFixed(3) + ' rad/s';
-
-    document.getElementById('periodo').textContent = periodo.toFixed(3) + ' s';
+    
     document.getElementById('energiaTotal').textContent = energiaTotal.toFixed(3) + ' J';
     document.getElementById('energiaCinetica').textContent = energiaCinetica.toFixed(3) + ' J';
     document.getElementById('energiaPotencial').textContent = energiaPotencial.toFixed(3) + ' J';
+*/
+    document.getElementById('faseInicial').textContent = calcularPhi().toFixed(3) + ' rad';
+    document.getElementById('amplitud').textContent = calcularAmplitud(t).toFixed(3) + ' rad';
+    document.getElementById('frecuenciaVibracion').textContent = frecuenciaVibracion + ' rad/s';
+
+    document.getElementById('periodo').textContent = periodo.toFixed(3) + ' s';
 }

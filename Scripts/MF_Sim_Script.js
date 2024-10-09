@@ -286,27 +286,22 @@ function calcularForzadoAmortiguado(time)
 
 function calcularSolucionParticular(time) {
     let w0 = calcularFrecuenciaVibracion();          // Frecuencia de vibración natural
-    let ca = calcularCoeficienteAmortiguamiento();   // Coeficiente de amortiguamiento
+    let gamma = calcularCoeficienteAmortiguamiento();   // Coeficiente de amortiguamiento
     let wf = frecuenciaFuerzaExterna;               // Frecuencia de la fuerza externa
 
     // Parte constante de la solución particular
-    let numerador = (6 * fuerzaExterna) / (m * l);
-    let denominador = Math.sqrt(Math.pow(2 * ca * wf, 2) + Math.pow(w0**2 - wf**2, 2));
-
-    // Amplitud de la solución particular
-    let amplitudParticular = numerador / denominador;
-
-    // Fase de la solución particular
-    let faseParticular = Math.atan2(2 * ca * wf, w0**2 - wf**2);
+    let numerador = (6 * fuerzaExterna / (m*l)) * Math.cos((wf * t) - Math.atan((2 * gamma * wf) / (w0**2 - wf**2)));
+    let denominador = Math.sqrt((2 * gamma * wf)**2 + (w0**2 - wf**2));
 
     // Cálculo de theta_p(t)
-    let posicionParticular = amplitudParticular * Math.cos(wf * time - faseParticular);
+    let posicionParticular = (numerador/denominador);
 
     // Cálculo de la velocidad particular: v_p(t)
     let velocidadParticular = -amplitudParticular * wf * Math.sin(wf * time - faseParticular);
 
     // Cálculo de la aceleración particular: a_p(t)
     let aceleracionParticular = -amplitudParticular * wf**2 * Math.cos(wf * time - faseParticular);
+    
 
     // Retornar un arreglo con posición, velocidad y aceleración
     return [posicionParticular, velocidadParticular, aceleracionParticular];
@@ -318,20 +313,34 @@ function calcularCoeficienteAmortiguamiento()
     return (6*b)/(m * (l)**2);
 }
 
+function calcularPhi(){
+    let w = calcularFrecuenciaVibracion();
+    let gamma = calcularCoeficienteAmortiguamiento();
+    let omega_d = Math.sqrt(w** 2 - gamma ** 2);
+
+    let phi = Math.atan2(-velocidadInicial-gamma*posicionInicial, (posicionInicial*omega_d));
+    return Math.abs(phi);
+}
+
+
 function calcularSubAmortiguado(time1)
 {
-    let zeta = calcularCoeficienteAmortiguamiento();
+    let gamma = calcularCoeficienteAmortiguamiento();
     let w = calcularFrecuenciaVibracion();
 
-    let omega_d = w * Math.sqrt(1 - zeta ** 2);
+    let omega_d = Math.sqrt(w** 2 - gamma ** 2);
 
-    let c1 = posicionInicial;
-    let c2 = (velocidadInicial + zeta * w * c1) / omega_d;
+    let phi = calcularPhi();
 
-    //Fórmulas de posición, velocidad y aceleración
-    let posicionAux = Math.exp(-zeta * w * time1) * (c1 * Math.cos(omega_d * time1) + c2 * Math.sin(omega_d * time1));
-    let velocidadAux = Math.exp(-zeta * w * time1) * (-c1 * omega_d * Math.sin(omega_d * time1) + c2 * omega_d * Math.cos(omega_d * time1)) - zeta * w * posicionAux;
-    let aceleracionAux = -w * w * posicionAux - 2 * zeta * w * velocidadAux;
+    let amplitud_C = (posicionInicial/Math.cos(phi));
+
+
+
+    //Fórmulas de posición, velocidad y aceleracióng
+    let posicionAux = amplitud_C*Math.exp(-gamma*time1)*Math.cos(omega_d*time1+phi);
+    let velocidadAux = -amplitud_C*gamma*Math.exp(-gamma*time1)*Math.cos(omega_d*time1 + phi) -amplitud_C*Math.exp(-gamma*time1)*omega_d*Math.sin(omega_d*time1 + phi)
+    let aceleracionAux = amplitud_C*(gamma** 2)*Math.exp(-gamma*time1)*Math.cos(omega_d*time1 + phi) + amplitud_C*(gamma** 2)*Math.exp(-gamma*time1)*Math.sin(omega_d*time1 + phi) 
+    + amplitud_C*gamma*Math.exp(-gamma*time1)*omega_d*Math.sin(omega_d*time1 + phi) - amplitud_C*Math.exp(-gamma*time1)*(omega_d** 2)*Math.cos(omega_d*time1 + phi); 
 
     let movimientosSubAmortiguado = [posicionAux, velocidadAux, aceleracionAux];
 
@@ -380,7 +389,6 @@ function calcularCritAmortiguado(time)
     let movimientosCritAmortiguado = [posicionAux, velocidadAux, aceleracionAux];
     return movimientosCritAmortiguado;
 }
-
 
 /*Funciones para generar la gráfica */
 function generarDatosGrafica(duracion, pasos) {
