@@ -87,30 +87,6 @@ function draw() {
     fill("#686898");
     rect(20, 20, 600, 10);
 
-    /*
-    //Añadir la lógica para determinar la posición, velocidad y aceleración
-    //Según el tipo de amortiguamiento del sistema
-    caAux = calcularCoeficienteAmortiguamiento();
-    fvAux = calcularFrecuenciaVibracion();
-    if(Math.pow(caAux, 2) < Math.pow(fvAux, 2)){
-        posicionActual = calcularSubAmortiguado(t)[0];
-        velocidadActual = calcularSubAmortiguado(t)[1];
-        aceleracionActual = calcularSubAmortiguado(t)[2];
-        console.log("Subamortiguado");
-    }
-    else if(Math.pow(caAux, 2) > Math.pow(fvAux, 2)){
-        posicionActual = calcularSobreAmortiguado(t)[0];
-        velocidadActual = calcularSobreAmortiguado(t)[1];
-        aceleracionActual = calcularSobreAmortiguado(t)[2];
-        console.log("SobreAmortiguado");
-    }
-    else{
-        posicionActual = calcularCritAmortiguado(t)[0];
-        velocidadActual = calcularCritAmortiguado(t)[1];
-        aceleracionActual = calcularCritAmortiguado(t)[2];
-        console.log("CriticamenteAmortiguado");
-    }*/
-
     //Añadir la lógica para determinar la posición, velocidad y aceleración
     //Según si el sistema es amortiguado o no
     //caAux = calcularCoeficienteAmortiguamiento();
@@ -197,27 +173,6 @@ function calcularFrecuenciaVibracion()
 {
     //Fórmula
     return Math.sqrt(3 * k / m);
-}
-
-function calcularPhi()
-{
-    let phiAux = 0;
-    if(posicionInicial > 0 || posicionInicial < 0)
-    {
-        phiAux = Math.atan2(-velocidadInicial, (frecuenciaVibracion * posicionInicial));
-    }
-    else
-    {
-        if(velocidadInicial > 0)
-        {
-            phiAux = (3 * Math.PI)/2
-        }
-        else
-        {
-            phiAux = (Math.PI)/2
-        }
-    }
-    return phiAux;
 }
 
 function calcularAmplitud()
@@ -412,28 +367,6 @@ function generarDatosGrafica(duracion, pasos) {
         let velocidad = 0;
         let aceleracion = 0;
         //Graficar el tipo de amortiguamiento correcto
-        /*
-        caAux = calcularCoeficienteAmortiguamiento();
-        fvAux = calcularFrecuenciaVibracion();
-        if(Math.pow(caAux, 2) < Math.pow(fvAux, 2)){
-            angulo = calcularSubAmortiguado(tiempo)[0];
-            velocidad = calcularSubAmortiguado(tiempo)[1];
-            aceleracion = calcularSubAmortiguado(tiempo)[2];
-            console.log("Graficando Sub");
-        }
-        else if(Math.pow(caAux, 2) > Math.pow(fvAux, 2)){
-            angulo = calcularSobreAmortiguado(tiempo)[0];
-            velocidad = calcularSobreAmortiguado(tiempo)[1];
-            aceleracion = calcularSobreAmortiguado(tiempo)[2];
-            console.log("Graficando Sobre");
-        }
-        else{
-            angulo = calcularCritAmortiguado(tiempo)[0];
-            velocidad = calcularCritAmortiguado(tiempo)[1];
-            aceleracion = calcularCritAmortiguado(tiempo)[2];
-            console.log("Graficando Criti");
-        }
-        */
         //Verificar si hay amortiguamiento
         if(b === 0) //no amortiguado
         {

@@ -39,6 +39,7 @@ document.addEventListener('slidersDataUpdated', function(e) {
 
     actualizarGrafica();
     actualizarVariables();
+    actualizarEcuaciones();
 });
 
 document.addEventListener('startAnimation', function(e) {
@@ -352,4 +353,14 @@ function actualizarVariables() {
     document.getElementById('energiaTotal').textContent = energiaTotal.toFixed(3) + ' J';
     document.getElementById('energiaCinetica').textContent = energiaCinetica.toFixed(3) + ' J';
     document.getElementById('energiaPotencial').textContent = energiaPotencial.toFixed(3) + ' J';
+}
+
+function actualizarEcuaciones() {
+    // Ecuación diferencial
+    document.getElementById('ecuacionDiferencial').innerHTML = 
+        `θ'' + (${calcularFrecuenciaVibracion().toFixed(3)}²)θ = 0`;
+
+    // Solución completa
+    document.getElementById('solucionCompleta').innerHTML = 
+        `θ(t) = (${calcularAmplitud().toFixed(3)}) * cos((${calcularFrecuenciaVibracion().toFixed(3)}) * t + (${calcularPhi().toFixed(3)}))`;
 }

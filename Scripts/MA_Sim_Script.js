@@ -44,6 +44,7 @@ document.addEventListener('slidersDataUpdated', function(e) {
     t = 0;
     actualizarGrafica();
     actualizarVariables();
+    actualizarEcuaciones();
 });
 
 document.addEventListener('startAnimation', function(e) {
@@ -177,8 +178,6 @@ function calcularPhi(){
     let phi = Math.atan2(-velocidadInicial-gamma*posicionInicial, (posicionInicial*omega_d));
     return Math.abs(phi);
 }
-
-
 
 function calcularSubAmortiguado(time1)
 {
@@ -453,4 +452,37 @@ function actualizarVariables() {
     document.getElementById('frecuenciaVibracion').textContent = frecuenciaVibracion + ' rad/s';
 
     document.getElementById('periodo').textContent = periodo.toFixed(3) + ' s';
+}
+
+function actualizarEcuaciones() {
+    // Ecuación diferencial
+    document.getElementById('ecuacionDiferencial').innerHTML = 
+        `θ'' + 2(${calcularCoeficienteAmortiguamiento().toFixed(3)})θ' + (${calcularFrecuenciaVibracion()}²)θ = 0`;
+
+    let solString = "";
+
+    gamma = calcularCoeficienteAmortiguamiento();
+    w0 = calcularFrecuenciaVibracion();
+    if (gamma < w0) {
+        let omega_d = Math.sqrt(w0**2 - gamma**2);
+        let phi = calcularPhi();
+        let amplitud_C = (posicionInicial/Math.cos(phi));
+
+        solucionHomogenea = `(${amplitud_C.toFixed(3)}) * e<sup>-${gamma.toFixed()}t</sup> * cos(${omega_d.toFixed(3)} * t + ${phi.toFixed(3)}) (Subamortiguado)`;
+    } else if (gamma > w0) {
+        let r1 = -gamma + Math.sqrt(gamma**2 - w0**2);
+        let r2 = -gamma - Math.sqrt(gamma**2 - w0**2);
+        let C1 = (velocidadInicial - posicionInicial * r2) / (r1 - r2);
+        let C2 = posicionInicial - C1;
+
+        solucionHomogenea = `(${C1.toFixed(3)})e<sup>${r1.toFixed(3)}t</sup> + (${C2.toFixed(3)})e<sup>${r2.toFixed(3)}t</sup> (Sobreamortiguado)`;
+    } else {
+        let C1 = posicionInicial;
+        let C2 = velocidadInicial + (-gamma) * posicionInicial;
+        solucionHomogenea = `(${C1.toFixed(3)} + ${C2.toFixed(3)}t)e<sup>-${gamma.toFixed(3)}t</sup> (Criticamente amortiguado)`;
+    }
+
+    // Solución completa
+    document.getElementById('solucionCompleta').innerHTML = 
+        `θ(t) = ${solucionHomogenea}`;
 }
