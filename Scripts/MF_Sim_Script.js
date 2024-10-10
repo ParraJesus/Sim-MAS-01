@@ -1,3 +1,7 @@
+//Documento Movimiendo oscilatorio forzado amortiguado
+
+
+
 /* Variables generales */
 
 let g = 9.8;    // gravedad
@@ -50,6 +54,7 @@ document.addEventListener('slidersDataUpdated', function(e) {
     t = 0;
     actualizarGrafica();
     actualizarVariables();
+    actualizarEcuaciones();
 });
 
 document.addEventListener('startAnimation', function(e) {
@@ -71,7 +76,11 @@ function windowResized() {
     resizeCanvas(canvasDiv.offsetWidth, canvasDiv.offsetHeight);
 }
 
+console.log("Valores iniciales:", m, l, k, posicionInicial, velocidadInicial, b, fuerzaExterna, frecuenciaFuerzaExterna);
+
 function draw() {
+
+    console.log("Frame:", frameCount, "Posición:", posicionActual);
     background("#f0f0f0");
     
     // Dibuja el techo
@@ -146,7 +155,7 @@ function draw() {
     actualizarVariables();
 }
 
-// Función para dibujar el resorte
+// Función para dibujar el re sorte
 function drawSpring(x1, y1, x2, y2) 
 {
     //line(x1, y1, x2, y2);
@@ -187,7 +196,7 @@ function pauseAnimation()
 function calcularFrecuenciaVibracion()
 {
     //Fórmula
-    return Math.sqrt(3 * k / m).toFixed(3);
+    return Math.sqrt(3 * k / m);
 }
 
 function calcularPhi()
@@ -221,7 +230,7 @@ function calcularAmplitud()
 
 function calcularForzadoNoAmortiguado(time)
 {
-    let w0 = calcularFrecuenciaVibracion();
+    let w0 = parseFloat(calcularFrecuenciaVibracion());
     let a = calcularAmplitud();
     let phi = calcularPhi();
     let posicionAux, velocidadAux, aceleracionAux;
@@ -245,66 +254,66 @@ function calcularForzadoNoAmortiguado(time)
     return movimientosSubAmortiguado;
 }
 
-function calcularForzadoAmortiguado(time)
-{
-    let ca = calcularCoeficienteAmortiguamiento();
+function calcularForzadoAmortiguado(time) {
     let w0 = calcularFrecuenciaVibracion();
-    let posicionAux, velocidadAux, aceleracionAux;
+    let gamma = calcularCoeficienteAmortiguamiento();
+    let wf = frecuenciaFuerzaExterna;
 
-    if(Math.pow(ca, 2) < Math.pow(w0, 2)){
-        //Seguir lógica de sub amortiguado
-        let movimientos = calcularSubAmortiguado(time);
-        posicionAux = movimientos[0];
-        velocidadAux = movimientos[1];
-        aceleracionAux = movimientos[2];
-    }
-    else if(Math.pow(ca, 2) > Math.pow(w0, 2)){
-        //Seguir lógica de sobre amortiguado
-        let movimientos = calcularSobreAmortiguado(time);
-        posicionAux = movimientos[0];
-        velocidadAux = movimientos[1];
-        aceleracionAux = movimientos[2];
-    }
-    else{
-        //Seguir lógica de sobre criticamente amortiguado
-        let movimientos = calcularCritAmortiguado(time);
-        posicionAux = movimientos[0];
-        velocidadAux = movimientos[1];
-        aceleracionAux = movimientos[2];
-    }
+    // Solución homogénea
+    let [thetaH, velocidadH, aceleracionH] = calcularSolucionHomogenea(time, w0, gamma);
+    
+    // Solución particular
+    let [thetaP, velocidadP, aceleracionP] = calcularSolucionParticular(time, w0, wf);    
+    // Suma de las soluciones
+    let posicionAux = thetaH + thetaP;
+    let velocidadAux = velocidadH + velocidadP;
+    let aceleracionAux = aceleracionH + aceleracionP;
 
-    let [theta_p, velocidad_p, aceleracion_p] = calcularSolucionParticular(time);
-
-    // La solución completa es la suma de la homogénea y la particular
-    let posicionTotal = posicionAux + theta_p;
-    let velocidadTotal = velocidadAux + velocidad_p;
-    let aceleracionTotal = aceleracionAux + aceleracion_p;
-
-    let movimientosSubAmortiguado = [posicionTotal, velocidadTotal, aceleracionTotal];
-    return movimientosSubAmortiguado;
+    return [posicionAux, velocidadAux, aceleracionAux];
 }
 
-function calcularSolucionParticular(time) {
-    let w0 = calcularFrecuenciaVibracion();          // Frecuencia de vibración natural
-    let gamma = calcularCoeficienteAmortiguamiento();   // Coeficiente de amortiguamiento
-    let wf = frecuenciaFuerzaExterna;               // Frecuencia de la fuerza externa
-
-    // Parte constante de la solución particular
-    let numerador = (6 * fuerzaExterna / (m*l)) * Math.cos((wf * t) - Math.atan((2 * gamma * wf) / (w0**2 - wf**2)));
-    let denominador = Math.sqrt((2 * gamma * wf)**2 + (w0**2 - wf**2));
-
-    // Cálculo de theta_p(t)
-    let posicionParticular = (numerador/denominador);
-
-    // Cálculo de la velocidad particular: v_p(t)
-    let velocidadParticular = -amplitudParticular * wf * Math.sin(wf * time - faseParticular);
-
-    // Cálculo de la aceleración particular: a_p(t)
-    let aceleracionParticular = -amplitudParticular * wf**2 * Math.cos(wf * time - faseParticular);
+function calcularSolucionHomogenea(time, w0, gamma) {
+    let A = calcularAmplitud();
+    let phi = calcularPhi();
     
+    if (gamma < w0) {
+        // Subamortiguado
+        let wd = Math.sqrt(w0**2 - gamma**2);
+        let theta = A * Math.exp(-gamma * time) * Math.cos(wd * time + phi);
+        let velocidad = -A * Math.exp(-gamma * time) * (gamma * Math.cos(wd * time + phi) + wd * Math.sin(wd * time + phi));
+        let aceleracion = A * Math.exp(-gamma * time) * ((gamma**2 - wd**2) * Math.cos(wd * time + phi) + 2 * gamma * wd * Math.sin(wd * time + phi));
+        return [theta, velocidad, aceleracion];
+    } else if (gamma > w0) {
+        // Sobreamortiguado
+        let r1 = -gamma + Math.sqrt(gamma**2 - w0**2);
+        let r2 = -gamma - Math.sqrt(gamma**2 - w0**2);
+        let C1 = (velocidadInicial - posicionInicial * r2) / (r1 - r2);
+        let C2 = posicionInicial - C1;
+        let theta = C1 * Math.exp(r1 * time) + C2 * Math.exp(r2 * time);
+        let velocidad = C1 * r1 * Math.exp(r1 * time) + C2 * r2 * Math.exp(r2 * time);
+        let aceleracion = C1 * r1**2 * Math.exp(r1 * time) + C2 * r2**2 * Math.exp(r2 * time);
+        return [theta, velocidad, aceleracion];
+    } else {
+        // Críticamente amortiguado
+        let theta = (A + A * gamma * time) * Math.exp(-gamma * time);
+        let velocidad = A * gamma * (1 - gamma * time) * Math.exp(-gamma * time);
+        let aceleracion = -A * gamma**2 * (2 - gamma * time) * Math.exp(-gamma * time);
+        return [theta, velocidad, aceleracion];
+    }
+}
 
-    // Retornar un arreglo con posición, velocidad y aceleración
-    return [posicionParticular, velocidadParticular, aceleracionParticular];
+function calcularSolucionParticular(time, w0, wf) {
+    let gamma = calcularCoeficienteAmortiguamiento(); // Añade esta línea
+    let numerador = (6 * fuerzaExterna) / (m * l);
+    let denominador = Math.sqrt((w0**2 - wf**2)**2 + (2 * gamma * wf)**2);
+    let A = numerador / denominador;
+    let delta = Math.atan2(2 * gamma * wf, w0**2 - wf**2);
+    
+    let theta = A * Math.cos(wf * time - delta);
+    let velocidad = -A * wf * Math.sin(wf * time - delta);
+    let aceleracion = -A * wf**2 * Math.cos(wf * time - delta);
+    
+    return [theta, velocidad, aceleracion];
 }
 
 function calcularCoeficienteAmortiguamiento()
@@ -563,7 +572,7 @@ function crearGrafica() {
     });
 }
 
-function actualizarGrafica() {
+function actualizarGrafica() {      
     let datos = generarDatosGrafica(100, 1000);
     grafica.data.datasets[0].data = datos.angulo;
     grafica.data.datasets[1].data = datos.velocidad;
@@ -586,7 +595,6 @@ function actualizarGrafica() {
 
 /*Funciones para manejar las variables */
 function actualizarVariables() {
-    /*
     let periodo = 2 * Math.PI / frecuenciaVibracion;
     let energiaTotal = 0.5 * k * Math.pow(amplitud, 2);
     let energiaCinetica = 0.5 * m * Math.pow(velocidadActual, 2);
@@ -594,10 +602,45 @@ function actualizarVariables() {
 
     document.getElementById('faseInicial').textContent = calcularPhi().toFixed(3) + ' rad';
     document.getElementById('amplitud').textContent = calcularAmplitud().toFixed(3) + ' rad';
-    document.getElementById('frecuenciaVibracion').textContent = frecuenciaVibracion.toFixed(3) + ' rad/s';
-
+    document.getElementById('frecuenciaVibracion').textContent = parseFloat(frecuenciaVibracion).toFixed(3) + ' rad/s';
     document.getElementById('periodo').textContent = periodo.toFixed(3) + ' s';
     document.getElementById('energiaTotal').textContent = energiaTotal.toFixed(3) + ' J';
     document.getElementById('energiaCinetica').textContent = energiaCinetica.toFixed(3) + ' J';
-    document.getElementById('energiaPotencial').textContent = energiaPotencial.toFixed(3) + ' J';*/
+    document.getElementById('energiaPotencial').textContent = energiaPotencial.toFixed(3) + ' J';
+}
+
+function actualizarEcuaciones() {
+    let w0 = Math.sqrt(3 * k / m);
+    let gamma = (6 * b) / (m * l**2);
+    let wf = frecuenciaFuerzaExterna;
+
+    // Ecuación diferencial
+    document.getElementById('ecuacionDiferencial').innerHTML = 
+        `θ'' + ${gamma.toFixed(3)}θ' + ${w0.toFixed(3)}²θ = ${(6*fuerzaExterna/(m*l)).toFixed(3)}cos(${wf.toFixed(3)}t)`;
+
+    // Solución homogénea (depende del tipo de amortiguamiento)
+    let solucionHomogenea = "";
+    if (gamma < w0) {
+        let wd = Math.sqrt(w0**2 - gamma**2);
+        solucionHomogenea = `A₁e<sup>-${gamma.toFixed(3)}t</sup>cos(${wd.toFixed(3)}t) + A₂e<sup>-${gamma.toFixed(3)}t</sup>sin(${wd.toFixed(3)}t)`;
+    } else if (gamma > w0) {
+        let r1 = -gamma + Math.sqrt(gamma**2 - w0**2);
+        let r2 = -gamma - Math.sqrt(gamma**2 - w0**2);
+        solucionHomogenea = `A₁e<sup>${r1.toFixed(3)}t</sup> + A₂e<sup>${r2.toFixed(3)}t</sup>`;
+    } else {
+        solucionHomogenea = `(A₁ + A₂t)e<sup>-${gamma.toFixed(3)}t</sup>`;
+    }
+    document.getElementById('solucionHomogenea').innerHTML = solucionHomogenea;
+
+    // Solución particular
+    let numerador = (6 * fuerzaExterna) / (m * l);
+    let denominador = Math.sqrt((w0**2 - wf**2)**2 + (2 * gamma * wf)**2);
+    let A = numerador / denominador;
+    let delta = Math.atan2(2 * gamma * wf, w0**2 - wf**2);
+    document.getElementById('solucionParticular').innerHTML = 
+        `${A.toFixed(3)}cos(${wf.toFixed(3)}t - ${delta.toFixed(3)})`;
+
+    // Solución completa
+    document.getElementById('solucionCompleta').innerHTML = 
+        `θ(t) = ${solucionHomogenea} + ${A.toFixed(3)}cos(${wf.toFixed(3)}t - ${delta.toFixed(3)})`;
 }

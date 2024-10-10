@@ -195,6 +195,39 @@ header, footer
     width: 100%;
 }
 
+/* Equations Section */	
+
+.equations-section {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.equations__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+.equation {
+    display: flex;
+    flex-direction: column;
+}
+
+.equation__label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.equation__value {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
 @media (max-width: 768px) {
     .slider-group {
         grid-template-columns: 1fr;
