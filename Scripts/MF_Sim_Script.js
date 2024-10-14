@@ -90,6 +90,10 @@ function draw() {
     //Añadir la lógica para determinar la posición, velocidad y aceleración
     //Según si el sistema es amortiguado o no
     //caAux = calcularCoeficienteAmortiguamiento();
+    let resultado = b === 0 ? calcularForzadoNoAmortiguado(t) : calcularForzadoAmortiguado(t);
+    posicionActual = resultado[0];
+    velocidadActual = resultado[1];
+    aceleracionActual = resultado[2];
     fvAux = calcularFrecuenciaVibracion();
     if(b === 0) //no amortiguado
     {
@@ -361,30 +365,13 @@ function generarDatosGrafica(duracion, pasos) {
         velocidad: [],
         aceleracion: []
     };
+    let factorEscalaAceleracion = 0.1; // Ajusta este valor según sea necesario
     for (let i = 0; i <= pasos; i++) {
         let tiempo = (i / pasos) * duracion;
-        let angulo = 0;
-        let velocidad = 0;
-        let aceleracion = 0;
-        //Graficar el tipo de amortiguamiento correcto
-        //Verificar si hay amortiguamiento
-        if(b === 0) //no amortiguado
-        {
-            angulo = calcularForzadoNoAmortiguado(tiempo)[0];
-            velocidad = calcularForzadoNoAmortiguado(tiempo)[1];
-            aceleracion = calcularForzadoNoAmortiguado(tiempo)[2];
-            console.log("Graficando Forzado No Amortiguado");
-        }
-        else
-        {
-            console.log("Graficando Forzado Amortiguado");
-            angulo = calcularForzadoAmortiguado(tiempo)[0];
-            velocidad = calcularForzadoAmortiguado(tiempo)[1];
-            aceleracion = calcularForzadoAmortiguado(tiempo)[2];
-        }
-        datos.angulo.push({x: tiempo, y: angulo});
-        datos.velocidad.push({x: tiempo, y: velocidad});
-        datos.aceleracion.push({x: tiempo, y: aceleracion});
+        let resultado = b === 0 ? calcularForzadoNoAmortiguado(tiempo) : calcularForzadoAmortiguado(tiempo);
+        datos.angulo.push({x: tiempo, y: resultado[0]});
+        datos.velocidad.push({x: tiempo, y: resultado[1]});
+        datos.aceleracion.push({x: tiempo, y: resultado[2] * factorEscalaAceleracion});
     }
     return datos;
 }
@@ -527,19 +514,24 @@ function actualizarGrafica() {
 }
 
 /*Funciones para manejar las variables */
+function calcularEnergias(posicion, velocidad) {
+    let energiaCinetica = 0.5 * m * (l * velocidad)**2;
+    let energiaPotencial = 0.5 * k * posicion**2;
+    let energiaTotal = energiaCinetica + energiaPotencial;
+    return {energiaCinetica, energiaPotencial, energiaTotal};
+}
+
 function actualizarVariables() {
     let periodo = 2 * Math.PI / frecuenciaVibracion;
-    let energiaTotal = 0.5 * k * Math.pow(amplitud, 2);
-    let energiaCinetica = 0.5 * m * Math.pow(velocidadActual, 2);
-    let energiaPotencial = energiaTotal - energiaCinetica;
+    let energias = calcularEnergias(posicionActual, velocidadActual);
 
     document.getElementById('faseInicial').textContent = calcularPhi().toFixed(3) + ' rad';
     document.getElementById('amplitud').textContent = calcularAmplitud().toFixed(3) + ' rad';
-    document.getElementById('frecuenciaVibracion').textContent = parseFloat(frecuenciaVibracion).toFixed(3) + ' rad/s';
+    document.getElementById('frecuenciaVibracion').textContent = frecuenciaVibracion.toFixed(3) + ' rad/s';
     document.getElementById('periodo').textContent = periodo.toFixed(3) + ' s';
-    document.getElementById('energiaTotal').textContent = energiaTotal.toFixed(3) + ' J';
-    document.getElementById('energiaCinetica').textContent = energiaCinetica.toFixed(3) + ' J';
-    document.getElementById('energiaPotencial').textContent = energiaPotencial.toFixed(3) + ' J';
+    document.getElementById('energiaTotal').textContent = energias.energiaTotal.toFixed(3) + ' J';
+    document.getElementById('energiaCinetica').textContent = energias.energiaCinetica.toFixed(3) + ' J';
+    document.getElementById('energiaPotencial').textContent = energias.energiaPotencial.toFixed(3) + ' J';
 }
 
 function actualizarEcuaciones() {
@@ -551,6 +543,7 @@ function actualizarEcuaciones() {
     document.getElementById('ecuacionDiferencial').innerHTML = 
         `θ'' + ${gamma.toFixed(3)}θ' + ${w0.toFixed(3)}²θ = ${(6*fuerzaExterna/(m*l)).toFixed(3)}cos(${wf.toFixed(3)}t)`;
 
+  
     // Solución homogénea (depende del tipo de amortiguamiento)
     let solucionHomogenea = "";
     if (gamma < w0) {
