@@ -575,6 +575,8 @@ function calcularEnergias(posicion, velocidad) {
 function actualizarVariables() {
     let periodo = 2 * Math.PI / frecuenciaVibracion;
     let energias = calcularEnergias(posicionActual, velocidadActual);
+    let amplitud = calcularAmplitud();
+    
 
     document.getElementById('faseInicial').textContent = calcularPhi().toFixed(3) + ' rad';
     document.getElementById('amplitud').textContent = calcularAmplitud().toFixed(3) + ' rad';
