@@ -179,12 +179,17 @@ function calcularFrecuenciaVibracion()
     return Math.sqrt(3 * k / m);
 }
 
-function calcularAmplitud()
-{
-    let amplitudAux;
+function calcularAmplitud() {
+    // Para un sistema forzado, la amplitud depende de la fuerza externa y la frecuencia
+    let w0 = calcularFrecuenciaVibracion();
+    let gamma = calcularCoeficienteAmortiguamiento();
+    let wf = frecuenciaFuerzaExterna;
 
-    amplitudAux = posicionInicial/Math.cos(phi);
-    return amplitudAux;
+    // Calculamos la amplitud usando la fórmula para un oscilador forzado amortiguado
+    let numerador = (6 * fuerzaExterna) / (m * l);
+    let denominador = Math.sqrt((w0**2 - wf**2)**2 + (2 * gamma * wf)**2);
+    
+    return numerador / denominador;
 }
 
 function calcularForzadoNoAmortiguado(time)
@@ -383,31 +388,28 @@ function crearGrafica() {
         data: {
             datasets: [{
                 label: 'Ángulo',
-                data: generarDatosGrafica(10, 1000),  // Aumentamos a 1000 puntos
-                borderColor: '#a8f808',
-                backgroundColor: '#a8f80844',
-                borderWidth: 2,
+                data: generarDatosGrafica(10, 200),  // Reducimos a 10 segundos y 200 puntos
+                borderColor: 'rgba(168, 248, 8, 0.8)',
+                backgroundColor: 'rgba(168, 248, 8, 0.2)',
+                borderWidth: 1,
                 pointRadius: 0,
                 fill: false,
-                tension: 0.4
             }, {
                 label: 'Velocidad',
-                data: generarDatosGrafica(10, 1000),
-                borderColor: '#8080f8',
-                backgroundColor: '#8080f844',
-                borderWidth: 2,
+                data: generarDatosGrafica(10, 200),
+                borderColor: 'rgba(128, 128, 248, 0.8)',
+                backgroundColor: 'rgba(128, 128, 248, 0.2)',
+                borderWidth: 1,
                 pointRadius: 0,
                 fill: false,
-                tension: 0.4
             }, {
                 label: 'Aceleración',
-                data: generarDatosGrafica(10, 1000),
-                borderColor: '#b808f8',
-                backgroundColor: '#b808f844',
-                borderWidth: 2,
+                data: generarDatosGrafica(10, 200),
+                borderColor: 'rgba(184, 8, 248, 0.8)',
+                backgroundColor: 'rgba(184, 8, 248, 0.2)',
+                borderWidth: 1,
                 pointRadius: 0,
                 fill: false,
-                tension: 0.4
             }]
         },
         options: {
@@ -467,7 +469,9 @@ function crearGrafica() {
                     },
                     grid: {
                         color: 'rgba(0, 0, 0, 0.1)'
-                    }
+                    },
+                    min: 0,
+                    max: 10  // Limitamos el eje X a 10 segundos
                 },
                 y: {
                     title: {
@@ -485,13 +489,14 @@ function crearGrafica() {
                     },
                     grid: {
                         color: 'rgba(0, 0, 0, 0.1)'
-                    }
+                    },
+                    suggestedMin: -2,
+                    suggestedMax: 2,
                 }
             }
         }
     });
 }
-
 function actualizarGrafica() {      
     let datos = generarDatosGrafica(100, 1000);
     grafica.data.datasets[0].data = datos.angulo;
@@ -513,6 +518,52 @@ function actualizarGrafica() {
     grafica.update();
 }
 
+/*Analisis de resonancia:*/
+
+function calcularFrecuenciaResonancia() {
+    // Para un sistema amortiguado, la frecuencia de resonancia es ligeramente diferente de la frecuencia natural
+    let w0 = Math.sqrt(3 * k / m); // Frecuencia natural
+    let gamma = (6 * b) / (m * l**2); // Coeficiente de amortiguamiento
+    return Math.sqrt(w0**2 - 2*gamma**2);
+}
+
+function detectarResonancia() {
+    let frecResonancia = calcularFrecuenciaResonancia();
+    let tolerancia = 0.05; // 5% de tolerancia
+
+    if (Math.abs(frecuenciaFuerzaExterna - frecResonancia) / frecResonancia < tolerancia) {
+        return {
+            esResonancia: true,
+            frecuenciaResonancia: frecResonancia,
+            diferencia: Math.abs(frecuenciaFuerzaExterna - frecResonancia)
+        };
+    } else {
+        return {
+            esResonancia: false,
+            frecuenciaResonancia: frecResonancia,
+            diferencia: Math.abs(frecuenciaFuerzaExterna - frecResonancia)
+        };
+    }
+}
+
+function mostrarInfoResonancia() {
+    let infoResonancia = detectarResonancia();
+    let textoResonancia = "";
+
+    if (infoResonancia.esResonancia) {
+        textoResonancia = `¡RESONANCIA DETECTADA! <br>
+            Frecuencia de resonancia: ${infoResonancia.frecuenciaResonancia.toFixed(3)} rad/s <br>
+            Diferencia con la frecuencia externa: ${infoResonancia.diferencia.toFixed(3)} rad/s`;
+    } else {
+        textoResonancia = `Sistema fuera de resonancia <br>
+            Frecuencia de resonancia: ${infoResonancia.frecuenciaResonancia.toFixed(3)} rad/s <br>
+            Diferencia con la frecuencia externa: ${infoResonancia.diferencia.toFixed(3)} rad/s`;
+    }
+
+    document.getElementById('infoResonancia').innerHTML = textoResonancia;
+}
+
+
 /*Funciones para manejar las variables */
 function calcularEnergias(posicion, velocidad) {
     let energiaCinetica = 0.5 * m * (l * velocidad)**2;
@@ -532,6 +583,8 @@ function actualizarVariables() {
     document.getElementById('energiaTotal').textContent = energias.energiaTotal.toFixed(3) + ' J';
     document.getElementById('energiaCinetica').textContent = energias.energiaCinetica.toFixed(3) + ' J';
     document.getElementById('energiaPotencial').textContent = energias.energiaPotencial.toFixed(3) + ' J';
+
+    mostrarInfoResonancia();
 }
 
 function actualizarEcuaciones() {
