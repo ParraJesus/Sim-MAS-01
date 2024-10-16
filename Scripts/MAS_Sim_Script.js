@@ -145,7 +145,7 @@ function calcularPhi()
     let phiAux = 0;
     if(posicionInicial > 0 || posicionInicial < 0)
     {
-        phiAux = Math.atan2(-velocidadInicial, (frecuenciaVibracion * posicionInicial));
+        phiAux = Math.atan2(-velocidadInicial, (frecuenciaVibracion * posicionInicial)) ;
     }
     else
     {
@@ -158,7 +158,8 @@ function calcularPhi()
             phiAux = (Math.PI)/2
         }
     }
-    return phiAux;
+    //return 3.42;
+    return Math.abs(phiAux);
 }
 
 function calcularAmplitud()

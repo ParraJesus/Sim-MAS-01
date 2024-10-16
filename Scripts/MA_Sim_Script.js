@@ -175,8 +175,33 @@ function calcularPhi(){
     let gamma = calcularCoeficienteAmortiguamiento();
     let omega_d = Math.sqrt(w** 2 - gamma ** 2);
 
-    let phi = Math.atan2(-velocidadInicial-gamma*posicionInicial, (posicionInicial*omega_d));
+    let phi = Math.atan(-velocidadInicial-gamma*posicionInicial / posicionInicial*omega_d);
+
+    let seno = -velocidadInicial-gamma*posicionInicial;
+    let coseno = (posicionInicial);
+
+    if (seno > 0 && coseno > 0) {
+        // Primer cuadrante: no se modifica phi
+    } else if (seno > 0 && coseno < 0) {
+        // Segundo cuadrante: phi = π - phi
+        phi = Math.PI - phi;
+        console.log("Segundo cuadrante, phi modificado: ", phi);
+    } else if (seno < 0 && coseno < 0) {
+        // Tercer cuadrante: phi = π + phi
+        phi = Math.PI + phi;
+        console.log("Tercer cuadrante, phi modificado: ", phi);
+    } else if (seno < 0 && coseno > 0) {
+        // Cuarto cuadrante: phi = phi - 2π
+        phi = 2 * Math.PI - phi;
+        console.log("Cuarto cuadrante, phi modificado: ", phi);
+    } else {
+        console.log("Ángulo fuera de los cuadrantes esperados");
+    }
+    
+
     return Math.abs(phi);
+
+
 }
 
 function calcularSubAmortiguado(time1)

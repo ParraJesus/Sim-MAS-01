@@ -176,7 +176,7 @@ function pauseAnimation()
 function calcularFrecuenciaVibracion()
 {
     //Fórmula
-    return Math.sqrt(3 * k / m);
+    return Math.sqrt((3 * k) / m);
 }
 
 function calcularAmplitud() {
@@ -291,7 +291,7 @@ function calcularPhi(){
     let gamma = calcularCoeficienteAmortiguamiento();
     let omega_d = Math.sqrt(w** 2 - gamma ** 2);
 
-    let phi = Math.atan2(-velocidadInicial-gamma*posicionInicial, (posicionInicial*omega_d));
+    let phi = Math.atan(-velocidadInicial-gamma*posicionInicial);
     return Math.abs(phi);
 }
 
@@ -580,7 +580,7 @@ function actualizarVariables() {
 
     document.getElementById('faseInicial').textContent = calcularPhi().toFixed(3) + ' rad';
     document.getElementById('amplitud').textContent = calcularAmplitud().toFixed(3) + ' rad';
-    document.getElementById('frecuenciaVibracion').textContent = frecuenciaVibracion.toFixed(3) + ' rad/s';
+    document.getElementById('frecuenciaVibracion').textContent = calcularFrecuenciaVibracion().toFixed(3) + ' rad/s';
     document.getElementById('periodo').textContent = periodo.toFixed(3) + ' s';
     document.getElementById('energiaTotal').textContent = energias.energiaTotal.toFixed(3) + ' J';
     document.getElementById('energiaCinetica').textContent = energias.energiaCinetica.toFixed(3) + ' J';
@@ -612,10 +612,32 @@ function actualizarEcuaciones() {
         solucionHomogenea = `(A₁ + A₂t)e<sup>-${gamma.toFixed(3)}t</sup>`;
     }
     document.getElementById('solucionHomogenea').innerHTML = solucionHomogenea;
-
+    
     // Solución particular
+    if (wf<w0) {
+        let numerador = (6 * fuerzaExterna) / (m * l);
+        let denominador = Math.sqrt(( wf**2 -w0**2 )**2 + (2 * gamma * wf)**2);    
+        let A = numerador / denominador;
+        let delta = 0;
+        document.getElementById('solucionParticular').innerHTML = 
+        `${A.toFixed(3)}cos(${wf.toFixed(3)}t - ${delta.toFixed(3)})`;
+
+    }else if (wf>w0) {
+        let numerador = (6 * fuerzaExterna) / (m * l);
+        let denominador = Math.sqrt(( w0**2 -wf**2 )**2 + (2 * gamma * wf)**2);
+        
+        let A = numerador/denominador;
+        let delta = Math.PI;
+        document.getElementById('solucionParticular').innerHTML = 
+        `${A.toFixed(3)}cos(${wf.toFixed(3)}t - ${delta})`;
+
+
+        
+    }    
     let numerador = (6 * fuerzaExterna) / (m * l);
-    let denominador = Math.sqrt((w0**2 - wf**2)**2 + (2 * gamma * wf)**2);
+    let denominador = Math.sqrt(( wf**2 -w0**2 )**2 + (2 * gamma * wf)**2);
+
+
     let A = numerador / denominador;
     let delta = Math.atan2(2 * gamma * wf, w0**2 - wf**2);
     document.getElementById('solucionParticular').innerHTML = 
