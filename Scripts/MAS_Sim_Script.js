@@ -145,7 +145,28 @@ function calcularPhi()
     let phiAux = 0;
     if(posicionInicial > 0 || posicionInicial < 0)
     {
-        phiAux = Math.atan2(-velocidadInicial, (frecuenciaVibracion * posicionInicial)) ;
+        phiAux = Math.atan(-velocidadInicial/(frecuenciaVibracion * posicionInicial)) ;
+        seno = -velocidadInicial/calcularFrecuenciaVibracion()*calcularAmplitud();
+        coseno = posicionInicial/calcularAmplitud();
+        if (seno > 0 && coseno > 0) {
+            // Primer cuadrante: no se modifica phi
+            console.log("Primer cuadrante, no se modifica phi");
+        } else if (seno > 0 && coseno < 0) {
+            // Segundo cuadrante: phi = π - phi
+            phi = Math.PI - phi;
+            console.log("Segundo cuadrante, phi modificado: ", phi);
+        } else if (seno < 0 && coseno < 0) {
+            // Tercer cuadrante: phi = π + phi
+            phi = Math.PI + phi;
+            console.log("Tercer cuadrante, phi modificado: ", phi);
+        } else if (seno < 0 && coseno > 0) {
+            // Cuarto cuadrante: phi = phi - 2π
+            phi = 2 * Math.PI - Math.abs(phi);
+            console.log("Cuarto cuadrante, phi modificado: ", phi);
+        } else {
+            console.log("Ángulo fuera de los cuadrantes esperados");
+        }
+        
     }
     else
     {
