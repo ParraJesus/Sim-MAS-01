@@ -192,7 +192,7 @@ function calcularPhi(){
         console.log("Tercer cuadrante, phi modificado: ", phi);
     } else if (seno < 0 && coseno > 0) {
         // Cuarto cuadrante: phi = phi - 2π
-        phi = 2 * Math.PI - phi;
+        phi = 2 * Math.PI - Math.abs(phi);
         console.log("Cuarto cuadrante, phi modificado: ", phi);
     } else {
         console.log("Ángulo fuera de los cuadrantes esperados");
