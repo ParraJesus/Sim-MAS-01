@@ -142,10 +142,18 @@ function calcularFrecuenciaVibracion()
 
 function calcularPhi()
 {
+    let omega_d = calcularFrecuenciaVibracion();
+
+    let seno = -velocidadInicial;
+    let coseno = (posicionInicial*omega_d);
+    let tan = (seno/coseno);
+
+    let phi = Math.atan(tan); 
+
     let phiAux = 0;
     if(posicionInicial > 0 || posicionInicial < 0)
     {
-        phiAux = Math.atan(-velocidadInicial/(frecuenciaVibracion * posicionInicial)) ;
+        /*phiAux = Math.atan(-velocidadInicial/(frecuenciaVibracion * posicionInicial)) ;
         seno = -velocidadInicial/calcularFrecuenciaVibracion()*calcularAmplitud();
         coseno = posicionInicial/calcularAmplitud();
         if (seno > 0 && coseno > 0) {
@@ -165,7 +173,46 @@ function calcularPhi()
             console.log("Cuarto cuadrante, phi modificado: ", phi);
         } else {
             console.log("Ángulo fuera de los cuadrantes esperados");
-        }
+        }*/
+
+    //let phi = Math.atan(-velocidadInicial-gamma*posicionInicial / posicionInicial*omega_d);
+
+
+    // Calcula el ángulo
+
+    console.log("X0 = : ", posicionInicial);
+        console.log("V0 = : ", velocidadInicial);
+        console.log("Omega = : ", omega_d);
+
+    console.log("seno: ", seno);
+    console.log("coseno: ", coseno);
+    
+    
+    console.log("arctan: ", tan);
+    console.log("phi: ", Math.atan(tan));
+    
+    phi = Math.abs(phi);
+
+    if (seno > 0 && coseno > 0) {
+        // Primer cuadrante: no se modifica phi
+    } else if (seno > 0 && coseno < 0) {
+        // Segundo cuadrante: phi = π - phi
+        phi = Math.PI - phi;
+        console.log("Segundo cuadrante, phi modificado: ", phi);
+    } else if (seno < 0 && coseno < 0) {
+        // Tercer cuadrante: phi = π + phi
+        phi = Math.PI + phi;
+        console.log("Tercer cuadrante, phi modificado: ", phi);
+    } else if (seno < 0 && coseno > 0) {
+        // Cuarto cuadrante: phi = phi - 2π
+        phi = 2 * Math.PI - phi;
+        console.log("Cuarto cuadrante, phi modificado: ", phi);
+    } else {
+        console.log("Ángulo fuera de los cuadrantes esperados");
+    }
+    
+
+    return phi;
         
     }
     else
@@ -180,7 +227,7 @@ function calcularPhi()
         }
     }
     //return 3.42;
-    return Math.abs(phiAux);
+    return phi;
 }
 
 function calcularAmplitud()

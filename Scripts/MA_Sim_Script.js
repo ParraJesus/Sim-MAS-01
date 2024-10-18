@@ -175,10 +175,28 @@ function calcularPhi(){
     let gamma = calcularCoeficienteAmortiguamiento();
     let omega_d = Math.sqrt(w** 2 - gamma ** 2);
 
-    let phi = Math.atan(-velocidadInicial-gamma*posicionInicial / posicionInicial*omega_d);
+    //let phi = Math.atan(-velocidadInicial-gamma*posicionInicial / posicionInicial*omega_d);
+
 
     let seno = -velocidadInicial-gamma*posicionInicial;
-    let coseno = (posicionInicial);
+    let coseno = (posicionInicial*omega_d);
+    let tan = (seno/coseno);
+
+    let phi = Math.atan(tan);  // Calcula el ángulo
+
+    console.log("X0 = : ", posicionInicial);
+        console.log("Gamma = : ", gamma);
+        console.log("V0 = : ", velocidadInicial);
+        console.log("Omega = : ", omega_d);
+
+    console.log("seno: ", seno);
+    console.log("coseno: ", coseno);
+    
+    
+    console.log("arctan: ", tan);
+    console.log("phi: ", Math.atan(tan));
+    
+    phi = Math.abs(phi);
 
     if (seno > 0 && coseno > 0) {
         // Primer cuadrante: no se modifica phi
@@ -192,14 +210,14 @@ function calcularPhi(){
         console.log("Tercer cuadrante, phi modificado: ", phi);
     } else if (seno < 0 && coseno > 0) {
         // Cuarto cuadrante: phi = phi - 2π
-        phi = 2 * Math.PI - Math.abs(phi);
+        phi = 2 * Math.PI - phi;
         console.log("Cuarto cuadrante, phi modificado: ", phi);
     } else {
         console.log("Ángulo fuera de los cuadrantes esperados");
     }
     
 
-    return Math.abs(phi);
+    return phi;
 
 
 }
