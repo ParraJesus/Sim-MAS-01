@@ -641,7 +641,7 @@ function actualizarEcuaciones() {
     let A = numerador / denominador;
     let delta = Math.atan2(2 * gamma * wf, w0**2 - wf**2);
     document.getElementById('solucionParticular').innerHTML = 
-        `${A.toFixed(3)}cos(${wf.toFixed(3)}t - ${delta.toFixed(3)})`;
+        `${A.toFixed(3)}cos(${wf.toFixed(3)}t - ${delta})`;
 
     // Solución completa
     document.getElementById('solucionCompleta').innerHTML = 
